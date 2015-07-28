@@ -34,15 +34,15 @@
 		modelVar="consumer"
 	>
 
-		<@liferay_ui["search-container-column-text"]
-			name="name"
-			value=consumer.getName()
-		/>
-
         <@liferay_ui["search-container-column-text"]
             name="consumer-key"
             value=consumer.getConsumerKey()
         />
+
+		<@liferay_ui["search-container-column-text"]
+			name="name"
+			value=consumer.getName()
+		/>
 
 		<@liferay_ui["search-container-column-text"]
 			name="description"
