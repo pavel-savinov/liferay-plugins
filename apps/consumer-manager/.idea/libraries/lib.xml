@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/consumer-manager-api/lib/org.osgi.compendium.jar!/" />
+      <root url="jar://$PROJECT_DIR$/consumer-manager-api/lib/org.osgi.core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/consumer-manager-api/lib/freemarker.jar!/" />
+      <root url="jar://$PROJECT_DIR$/consumer-manager-api/lib/com.liferay.portal.log.bridge.jar!/" />
+      <root url="jar://$PROJECT_DIR$/consumer-manager-api/lib/com.liferay.osgi.util.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

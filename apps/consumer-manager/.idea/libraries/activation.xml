@@ -1,0 +1,81 @@
+<component name="libraryTable">
+  <library name="activation">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/activation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/annotations.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/ant-apache-bsf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/ant-contrib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/ant-ext.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/ant-installer.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/antelope.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/catalina.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/cobertura.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/deployment.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/derby.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/derbytools.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/dtddoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/dtdparser.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/dumbster.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/ecj.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/firebird.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/hamcrest-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/hamcrest-library.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/hsql.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/interbase.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/j2h.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jaas.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jalopy.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jargs.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jarjar.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jasper.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jaxb-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jbi_rt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jetty-server.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jetty-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jhighlight.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jms.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jndi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jnet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jserrorcollector.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jsp-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jta.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jtds.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/junit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jutf7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/jymsg.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/liferay-doclet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/mail.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/maven-ant-tasks.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/mockito.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/mysql.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/objenesis.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/orangevolt-ant-tasks.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/p6spy.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/persistence.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/postgresql.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/powermock-mockito.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/qdox.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/resin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/sap.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/saxpath.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/script-10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/sdk-addon-api-0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/selenium-java.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/selenium-server.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/servlet-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/smtp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/sonar-ant-task.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/spring-instrument-tomcat.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/spring-instrument.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/spring-test.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/tlddoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/tomcat-coyote.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/xmltask.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/mockito.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../liferay-portal_6.2.x/lib/development/powermock-mockito.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/consumer-manager-api/consumer-manager-api.iml" filepath="$PROJECT_DIR$/consumer-manager-api/consumer-manager-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consumer-manager-web/docroot/WEB-INF/consumer-manager-web.iml" filepath="$PROJECT_DIR$/consumer-manager-web/docroot/WEB-INF/consumer-manager-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/runtime-dependencies/runtime-dependencies.iml" filepath="$PROJECT_DIR$/runtime-dependencies/runtime-dependencies.iml" />
+    </modules>
+  </component>
+</project>
