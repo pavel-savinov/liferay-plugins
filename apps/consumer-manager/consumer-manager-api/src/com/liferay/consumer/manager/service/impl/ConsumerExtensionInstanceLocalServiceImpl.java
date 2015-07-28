@@ -14,6 +14,7 @@
 
 package com.liferay.consumer.manager.service.impl;
 
+import com.liferay.consumer.manager.DuplicateConsumerExtensionInstanceException;
 import com.liferay.consumer.manager.model.ConsumerExtensionInstance;
 import com.liferay.consumer.manager.service.base.ConsumerExtensionInstanceLocalServiceBaseImpl;
 import com.liferay.counter.service.CounterLocalServiceUtil;
@@ -48,6 +49,14 @@ public class ConsumerExtensionInstanceLocalServiceImpl
             String consumerExtensionKey, long consumerId, String typeSettings,
             ServiceContext serviceContext)
         throws PortalException, SystemException {
+
+        ConsumerExtensionInstance checkConsumerExtensionInstance =
+            consumerExtensionInstancePersistence.fetchByK_C(
+                consumerExtensionKey, consumerId);
+
+        if (checkConsumerExtensionInstance != null) {
+            throw new DuplicateConsumerExtensionInstanceException();
+        }
 
         User user = UserLocalServiceUtil
             .getUser(serviceContext.getUserId());
@@ -112,6 +121,17 @@ public class ConsumerExtensionInstanceLocalServiceImpl
             long consumerId, String typeSettings,
             ServiceContext serviceContext)
         throws PortalException, SystemException {
+
+        ConsumerExtensionInstance checkConsumerExtensionInstance =
+            consumerExtensionInstancePersistence.fetchByK_C(
+                consumerExtensionKey, consumerId);
+
+        if ((checkConsumerExtensionInstance != null) &&
+            (checkConsumerExtensionInstance.getConsumerExtensionInstanceId() !=
+                consumerExtensionInstanceId)) {
+
+            throw new DuplicateConsumerExtensionInstanceException();
+        }
 
         Date now = new Date();
 

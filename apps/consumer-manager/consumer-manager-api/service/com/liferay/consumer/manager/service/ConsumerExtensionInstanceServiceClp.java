@@ -21,6 +21,8 @@ public class ConsumerExtensionInstanceServiceClp
     private String[] _methodParameterTypes5;
     private String _methodName6;
     private String[] _methodParameterTypes6;
+    private String _methodName7;
+    private String[] _methodParameterTypes7;
 
     public ConsumerExtensionInstanceServiceClp(
         InvokableService invokableService) {
@@ -41,17 +43,21 @@ public class ConsumerExtensionInstanceServiceClp
                 "com.liferay.portal.service.ServiceContext"
             };
 
-        _methodName4 = "getConsumerExtensionInstance";
+        _methodName4 = "deleteConsumerExtensionInstance";
 
-        _methodParameterTypes4 = new String[] { "long", "java.lang.String" };
+        _methodParameterTypes4 = new String[] { "long" };
 
-        _methodName5 = "getConsumerExtensionInstances";
+        _methodName5 = "getConsumerExtensionInstance";
 
-        _methodParameterTypes5 = new String[] { "long" };
+        _methodParameterTypes5 = new String[] { "long", "java.lang.String" };
 
-        _methodName6 = "updateConsumerExtensionInstance";
+        _methodName6 = "getConsumerExtensionInstances";
 
-        _methodParameterTypes6 = new String[] {
+        _methodParameterTypes6 = new String[] { "long" };
+
+        _methodName7 = "updateConsumerExtensionInstance";
+
+        _methodParameterTypes7 = new String[] {
                 "long", "java.lang.String", "long", "java.lang.String",
                 "com.liferay.portal.service.ServiceContext"
             };
@@ -147,8 +153,8 @@ public class ConsumerExtensionInstanceServiceClp
     }
 
     @Override
-    public com.liferay.consumer.manager.model.ConsumerExtensionInstance getConsumerExtensionInstance(
-        long consumerId, java.lang.String consumerExtensionKey)
+    public com.liferay.consumer.manager.model.ConsumerExtensionInstance deleteConsumerExtensionInstance(
+        long consumerExtensionInstanceId)
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException {
         Object returnObj = null;
@@ -156,6 +162,39 @@ public class ConsumerExtensionInstanceServiceClp
         try {
             returnObj = _invokableService.invokeMethod(_methodName4,
                     _methodParameterTypes4,
+                    new Object[] { consumerExtensionInstanceId });
+        } catch (Throwable t) {
+            t = ClpSerializer.translateThrowable(t);
+
+            if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+                throw (com.liferay.portal.kernel.exception.PortalException) t;
+            }
+
+            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+                throw (com.liferay.portal.kernel.exception.SystemException) t;
+            }
+
+            if (t instanceof RuntimeException) {
+                throw (RuntimeException) t;
+            } else {
+                throw new RuntimeException(t.getClass().getName() +
+                    " is not a valid exception");
+            }
+        }
+
+        return (com.liferay.consumer.manager.model.ConsumerExtensionInstance) ClpSerializer.translateOutput(returnObj);
+    }
+
+    @Override
+    public com.liferay.consumer.manager.model.ConsumerExtensionInstance getConsumerExtensionInstance(
+        long consumerId, java.lang.String consumerExtensionKey)
+        throws com.liferay.portal.kernel.exception.PortalException,
+            com.liferay.portal.kernel.exception.SystemException {
+        Object returnObj = null;
+
+        try {
+            returnObj = _invokableService.invokeMethod(_methodName5,
+                    _methodParameterTypes5,
                     new Object[] {
                         consumerId,
                         
@@ -191,8 +230,8 @@ public class ConsumerExtensionInstanceServiceClp
         Object returnObj = null;
 
         try {
-            returnObj = _invokableService.invokeMethod(_methodName5,
-                    _methodParameterTypes5, new Object[] { consumerId });
+            returnObj = _invokableService.invokeMethod(_methodName6,
+                    _methodParameterTypes6, new Object[] { consumerId });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
 
@@ -226,8 +265,8 @@ public class ConsumerExtensionInstanceServiceClp
         Object returnObj = null;
 
         try {
-            returnObj = _invokableService.invokeMethod(_methodName6,
-                    _methodParameterTypes6,
+            returnObj = _invokableService.invokeMethod(_methodName7,
+                    _methodParameterTypes7,
                     new Object[] {
                         consumerExtensionInstanceId,
                         

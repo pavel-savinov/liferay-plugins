@@ -56,6 +56,23 @@ public class ConsumerExtensionInstanceServiceImpl
     }
 
     @Override
+    public ConsumerExtensionInstance deleteConsumerExtensionInstance(
+            long consumerExtensionInstanceId)
+        throws PortalException, SystemException {
+
+        ConsumerExtensionInstance consumerExtensionInstance =
+            consumerExtensionInstanceLocalService.getConsumerExtensionInstance(
+                consumerExtensionInstanceId);
+
+        ConsumerPermission.check(
+            getPermissionChecker(), consumerExtensionInstance.getConsumerId(),
+            ActionKeys.UPDATE);
+
+        return consumerExtensionInstanceLocalService.
+            deleteConsumerExtensionInstance(consumerExtensionInstanceId);
+    }
+
+    @Override
     public ConsumerExtensionInstance getConsumerExtensionInstance(
             long consumerId, String consumerExtensionKey)
         throws PortalException, SystemException {

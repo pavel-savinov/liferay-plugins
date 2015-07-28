@@ -12,17 +12,31 @@
  * details.
  */
 
-package com.liferay.consumer.manager.api.model;
+package com.liferay.consumer.manager;
 
-import java.util.Map;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
- * @author Eudaldo Alonso
+ * @author Brian Wing Shun Chan
  */
-public interface ConsumerExtensionsRegistry {
+public class DuplicateConsumerExtensionInstanceException extends PortalException {
 
-	public ConsumerExtension getConsumerExtension(String consumerExtensionKey);
+	public DuplicateConsumerExtensionInstanceException() {
+		super();
+	}
 
-	public Map<String, ConsumerExtension> getConsumerExtensions();
+	public DuplicateConsumerExtensionInstanceException(String msg) {
+		super(msg);
+	}
+
+	public DuplicateConsumerExtensionInstanceException(
+        String msg, Throwable cause) {
+
+		super(msg, cause);
+	}
+
+	public DuplicateConsumerExtensionInstanceException(Throwable cause) {
+		super(cause);
+	}
 
 }

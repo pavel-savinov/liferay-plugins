@@ -59,6 +59,14 @@ public class ConsumerExtensionInstanceServiceWrapper
     }
 
     @Override
+    public com.liferay.consumer.manager.model.ConsumerExtensionInstance deleteConsumerExtensionInstance(
+        long consumerExtensionInstanceId)
+        throws com.liferay.portal.kernel.exception.PortalException,
+            com.liferay.portal.kernel.exception.SystemException {
+        return _consumerExtensionInstanceService.deleteConsumerExtensionInstance(consumerExtensionInstanceId);
+    }
+
+    @Override
     public com.liferay.consumer.manager.model.ConsumerExtensionInstance getConsumerExtensionInstance(
         long consumerId, java.lang.String consumerExtensionKey)
         throws com.liferay.portal.kernel.exception.PortalException,

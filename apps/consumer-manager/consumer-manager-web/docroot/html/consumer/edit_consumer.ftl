@@ -24,7 +24,7 @@
 
 <@portlet["actionURL"] name="updateConsumer" var="addConsumerURL" />
 
-<@aui["form"] action="${addConsumerURL}" method="post" name="fm">
+<@aui["form"] action="${addConsumerURL}" method="post" name="fm" onSubmit="event.preventDefault(); saveFields();">
 	<@aui["input"] name="redirect" type="hidden" value="${redirect}" />
 	<@aui["input"] name="consumerId" type="hidden" value=consumerId />
     <@aui["input"] name="consumerExtensions" type="hidden" />

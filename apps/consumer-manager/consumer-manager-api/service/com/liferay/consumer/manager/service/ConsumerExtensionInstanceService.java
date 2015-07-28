@@ -60,6 +60,11 @@ public interface ConsumerExtensionInstanceService extends BaseService,
         throws com.liferay.portal.kernel.exception.PortalException,
             com.liferay.portal.kernel.exception.SystemException;
 
+    public com.liferay.consumer.manager.model.ConsumerExtensionInstance deleteConsumerExtensionInstance(
+        long consumerExtensionInstanceId)
+        throws com.liferay.portal.kernel.exception.PortalException,
+            com.liferay.portal.kernel.exception.SystemException;
+
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public com.liferay.consumer.manager.model.ConsumerExtensionInstance getConsumerExtensionInstance(
         long consumerId, java.lang.String consumerExtensionKey)

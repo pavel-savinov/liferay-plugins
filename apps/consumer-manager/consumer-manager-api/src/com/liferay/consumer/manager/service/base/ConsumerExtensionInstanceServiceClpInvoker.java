@@ -21,6 +21,8 @@ public class ConsumerExtensionInstanceServiceClpInvoker {
     private String[] _methodParameterTypes32;
     private String _methodName33;
     private String[] _methodParameterTypes33;
+    private String _methodName34;
+    private String[] _methodParameterTypes34;
 
     public ConsumerExtensionInstanceServiceClpInvoker() {
         _methodName24 = "getBeanIdentifier";
@@ -38,17 +40,21 @@ public class ConsumerExtensionInstanceServiceClpInvoker {
                 "com.liferay.portal.service.ServiceContext"
             };
 
-        _methodName31 = "getConsumerExtensionInstance";
+        _methodName31 = "deleteConsumerExtensionInstance";
 
-        _methodParameterTypes31 = new String[] { "long", "java.lang.String" };
+        _methodParameterTypes31 = new String[] { "long" };
 
-        _methodName32 = "getConsumerExtensionInstances";
+        _methodName32 = "getConsumerExtensionInstance";
 
-        _methodParameterTypes32 = new String[] { "long" };
+        _methodParameterTypes32 = new String[] { "long", "java.lang.String" };
 
-        _methodName33 = "updateConsumerExtensionInstance";
+        _methodName33 = "getConsumerExtensionInstances";
 
-        _methodParameterTypes33 = new String[] {
+        _methodParameterTypes33 = new String[] { "long" };
+
+        _methodName34 = "updateConsumerExtensionInstance";
+
+        _methodParameterTypes34 = new String[] {
                 "long", "java.lang.String", "long", "java.lang.String",
                 "com.liferay.portal.service.ServiceContext"
             };
@@ -78,17 +84,22 @@ public class ConsumerExtensionInstanceServiceClpInvoker {
 
         if (_methodName31.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes31, parameterTypes)) {
-            return ConsumerExtensionInstanceServiceUtil.getConsumerExtensionInstance(((Long) arguments[0]).longValue(),
-                (java.lang.String) arguments[1]);
+            return ConsumerExtensionInstanceServiceUtil.deleteConsumerExtensionInstance(((Long) arguments[0]).longValue());
         }
 
         if (_methodName32.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
-            return ConsumerExtensionInstanceServiceUtil.getConsumerExtensionInstances(((Long) arguments[0]).longValue());
+            return ConsumerExtensionInstanceServiceUtil.getConsumerExtensionInstance(((Long) arguments[0]).longValue(),
+                (java.lang.String) arguments[1]);
         }
 
         if (_methodName33.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
+            return ConsumerExtensionInstanceServiceUtil.getConsumerExtensionInstances(((Long) arguments[0]).longValue());
+        }
+
+        if (_methodName34.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
             return ConsumerExtensionInstanceServiceUtil.updateConsumerExtensionInstance(((Long) arguments[0]).longValue(),
                 (java.lang.String) arguments[1],
                 ((Long) arguments[2]).longValue(),

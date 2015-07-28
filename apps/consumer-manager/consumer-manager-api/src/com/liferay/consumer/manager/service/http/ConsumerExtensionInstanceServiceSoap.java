@@ -68,6 +68,20 @@ public class ConsumerExtensionInstanceServiceSoap {
         }
     }
 
+    public static com.liferay.consumer.manager.model.ConsumerExtensionInstanceSoap deleteConsumerExtensionInstance(
+        long consumerExtensionInstanceId) throws RemoteException {
+        try {
+            com.liferay.consumer.manager.model.ConsumerExtensionInstance returnValue =
+                ConsumerExtensionInstanceServiceUtil.deleteConsumerExtensionInstance(consumerExtensionInstanceId);
+
+            return com.liferay.consumer.manager.model.ConsumerExtensionInstanceSoap.toSoapModel(returnValue);
+        } catch (Exception e) {
+            _log.error(e, e);
+
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
     public static com.liferay.consumer.manager.model.ConsumerExtensionInstanceSoap getConsumerExtensionInstance(
         long consumerId, java.lang.String consumerExtensionKey)
         throws RemoteException {
