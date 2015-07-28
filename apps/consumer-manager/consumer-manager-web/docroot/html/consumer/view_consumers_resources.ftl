@@ -34,10 +34,10 @@
 		modelVar="consumer"
 	>
 
-        <@liferay_ui["search-container-column-text"]
-            name="consumer-key"
-            value=consumer.getConsumerKey()
-        />
+		<@liferay_ui["search-container-column-text"]
+			name="consumer-key"
+			value=consumer.getConsumerKey()
+		/>
 
 		<@liferay_ui["search-container-column-text"]
 			name="name"
@@ -54,7 +54,7 @@
 			name=""
 		>
 			<@liferay_ui["icon-menu"]>
-                <#if consumerPermission.contains(permissionChecker, consumer, actionKeys.UPDATE)>
+				<#if consumerPermission.contains(permissionChecker, consumer, actionKeys.UPDATE)>
 					<@portlet["renderURL"] var="editConsumerURL">
 						<@portlet["param"] name="mvcPath" value="${consumerManagerPath.EDIT_CONSUMER}" />
 						<@portlet["param"] name="redirect" value="${viewConsumersURL}" />
@@ -66,7 +66,7 @@
 						method="get"
 						url="${editConsumerURL}"
 					/>
-                </#if>
+				</#if>
 
 				<#if consumerPermission.contains(permissionChecker, consumer, actionKeys.DELETE)>
 					<@portlet["actionURL"] name="deleteConsumer" var="deleteConsumerURL">

@@ -25,16 +25,15 @@ import java.util.List;
 
 import javax.portlet.PortletException;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
-
 /**
  * @author Eduardo Garcia
  */
 public class ConsumerSearchContainerIterator
 	extends SearchContainerIterator<Consumer> {
 
-	public ConsumerSearchContainerIterator(long companyId, String keywords, ConsumerLocalService consumerLocalService)
+	public ConsumerSearchContainerIterator(
+			long companyId, String keywords,
+			ConsumerLocalService consumerLocalService)
 		throws PortletException {
 
 		super(companyId, keywords);
@@ -51,11 +50,11 @@ public class ConsumerSearchContainerIterator
 					companyId, start, end, null);
 		}
 
-        BaseModelSearchResult<Consumer> searchResults =
-            _consumerLocalService.searchConsumers(
-                companyId, keywords, start, end);
+		BaseModelSearchResult<Consumer> searchResults =
+			_consumerLocalService.searchConsumers(
+				companyId, keywords, start, end);
 
-        return searchResults.getBaseModels();
+		return searchResults.getBaseModels();
 	}
 
 	@Override
@@ -64,11 +63,11 @@ public class ConsumerSearchContainerIterator
 			return _consumerLocalService.getConsumersCount(companyId);
 		}
 
-        BaseModelSearchResult<Consumer> searchResults =
-            _consumerLocalService.searchConsumers(
-                companyId, keywords, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		BaseModelSearchResult<Consumer> searchResults =
+			_consumerLocalService.searchConsumers(
+				companyId, keywords, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-        return searchResults.getLength();
+		return searchResults.getLength();
 	}
 
 	private ConsumerLocalService _consumerLocalService;

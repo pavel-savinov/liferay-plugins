@@ -9,17 +9,17 @@
 
 		<column name="consumerId" type="long" primary="true" />
 
-        <!-- Audit fields -->
+		<!-- Audit fields -->
 
-        <column name="companyId" type="long" />
-        <column name="userId" type="long" />
-        <column name="userName" type="String" />
-        <column name="createDate" type="Date" />
-        <column name="modifiedDate" type="Date" />
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
 
 		<!-- Other fields -->
 
-        <column name="consumerKey" type="String" localized="false" />
+		<column name="consumerKey" type="String" localized="false" />
 		<column name="name" type="String" localized="true" />
 		<column name="description" type="String" localized="true" />
 
@@ -30,56 +30,57 @@
 		</order>
 
 		<!-- Finder methods -->
+
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>
 
-        <finder name="CompanyIdAndConsumerKey" return-type="Consumer" unique="true">
-            <finder-column name="companyId" />
-            <finder-column name="consumerKey" />
-        </finder>
+		<finder name="CompanyIdAndConsumerKey" return-type="Consumer" unique="true">
+			<finder-column name="companyId" />
+			<finder-column name="consumerKey" />
+		</finder>
 	</entity>
-    <entity name="ConsumerExtensionInstance" uuid="true" local-service="true" remote-service="true">
+	<entity name="ConsumerExtensionInstance" uuid="true" local-service="true" remote-service="true">
 
-        <!-- PK fields -->
+		<!-- PK fields -->
 
-        <column name="consumerExtensionInstanceId" type="long" primary="true" />
+		<column name="consumerExtensionInstanceId" type="long" primary="true" />
 
-        <!-- Audit fields -->
+		<!-- Audit fields -->
 
-        <column name="companyId" type="long" />
-        <column name="userId" type="long" />
-        <column name="userName" type="String" />
-        <column name="createDate" type="Date" />
-        <column name="modifiedDate" type="Date" />
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
 
-        <!-- Other fields -->
+		<!-- Other fields -->
 
-        <column name="consumerExtensionKey" type="String" />
-        <column name="consumerId" type="long" />
-        <column name="typeSettings" type="String" />
+		<column name="consumerExtensionKey" type="String" />
+		<column name="consumerId" type="long" />
+		<column name="typeSettings" type="String" />
 
-        <!-- Order -->
+		<!-- Order -->
 
-        <order by="desc">
-            <order-column name="consumerExtensionKey" />
-        </order>
+		<order by="desc">
+			<order-column name="consumerExtensionKey" />
+		</order>
 
-        <!-- Finder methods -->
+		<!-- Finder methods -->
 
-        <finder name="CompanyId" return-type="Collection">
-            <finder-column name="companyId" />
-        </finder>
-        <finder name="ConsumerId" return-type="Collection">
-            <finder-column name="consumerId" />
-        </finder>
-        <finder name="K_C" return-type="ConsumerExtension">
-            <finder-column name="consumerExtensionKey" />
-            <finder-column name="consumerId" />
-        </finder>
-    </entity>
-    <exceptions>
-        <exception>InvalidConsumerExtension</exception>
-        <exception>InvalidName</exception>
-    </exceptions>
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
+		</finder>
+		<finder name="ConsumerId" return-type="Collection">
+			<finder-column name="consumerId" />
+		</finder>
+		<finder name="K_C" return-type="ConsumerExtension">
+			<finder-column name="consumerExtensionKey" />
+			<finder-column name="consumerId" />
+		</finder>
+	</entity>
+	<exceptions>
+		<exception>InvalidConsumerExtension</exception>
+		<exception>InvalidName</exception>
+	</exceptions>
 </service-builder>

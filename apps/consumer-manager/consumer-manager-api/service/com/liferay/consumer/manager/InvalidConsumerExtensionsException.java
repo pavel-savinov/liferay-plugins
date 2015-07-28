@@ -31,14 +31,15 @@ public class InvalidConsumerExtensionsException extends PortalException {
 	}
 
 	public InvalidConsumerExtensionsException(
-        List<InvalidConsumerExtensionException> exceptions) {
+		List<InvalidConsumerExtensionException> exceptions) {
 
 		super();
 
 		if ((exceptions != null) && !exceptions.isEmpty()) {
 			InvalidConsumerExtensionException exception = exceptions.get(0);
 
-			_exceptionsMap.put(exception.getConsumerExtensionGuid(), exceptions);
+			_exceptionsMap.put(
+				exception.getConsumerExtensionGuid(), exceptions);
 		}
 	}
 
@@ -69,7 +70,8 @@ public class InvalidConsumerExtensionsException extends PortalException {
 		return _exceptionsMap.get(trackingActionId);
 	}
 
-	private Map<String, List<InvalidConsumerExtensionException>> _exceptionsMap =
-		new HashMap<String, List<InvalidConsumerExtensionException>>();
+	private Map<String, List<InvalidConsumerExtensionException>>
+		_exceptionsMap =
+			new HashMap<String, List<InvalidConsumerExtensionException>>();
 
 }

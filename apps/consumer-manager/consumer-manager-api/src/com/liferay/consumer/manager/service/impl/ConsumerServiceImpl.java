@@ -15,8 +15,8 @@
 package com.liferay.consumer.manager.service.impl;
 
 import com.liferay.consumer.manager.model.Consumer;
-import com.liferay.consumer.manager.service.permission.ConsumerManagerPermission;
 import com.liferay.consumer.manager.service.base.ConsumerServiceBaseImpl;
+import com.liferay.consumer.manager.service.permission.ConsumerManagerPermission;
 import com.liferay.consumer.manager.service.permission.ConsumerPermission;
 import com.liferay.consumer.manager.util.ActionKeys;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,63 +43,64 @@ import java.util.Map;
  */
 public class ConsumerServiceImpl extends ConsumerServiceBaseImpl {
 
-    @Override
-    public Consumer addConsumer(
-            String consumerKey, Map<Locale, String> descriptionMap,
-            Map<Locale, String> nameMap, ServiceContext serviceContext)
-        throws PortalException, SystemException {
+	@Override
+	public Consumer addConsumer(
+			String consumerKey, Map<Locale, String> descriptionMap,
+			Map<Locale, String> nameMap, ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
-        ConsumerManagerPermission.check(
-            getPermissionChecker(), serviceContext.getScopeGroupId(),
-            ActionKeys.ADD_CONSUMER);
+		ConsumerManagerPermission.check(
+			getPermissionChecker(), serviceContext.getScopeGroupId(),
+			ActionKeys.ADD_CONSUMER);
 
-        return consumerLocalService.addConsumer(
-            consumerKey, descriptionMap, nameMap, serviceContext);
-    }
+		return consumerLocalService.addConsumer(
+			consumerKey, descriptionMap, nameMap, serviceContext);
+	}
 
-    @Override
-    public Consumer deleteConsumer(long consumerId)
-        throws PortalException, SystemException {
+	@Override
+	public Consumer deleteConsumer(long consumerId)
+		throws PortalException, SystemException {
 
-        ConsumerPermission.check(
-            getPermissionChecker(), consumerId, ActionKeys.DELETE);
+		ConsumerPermission.check(
+			getPermissionChecker(), consumerId, ActionKeys.DELETE);
 
-        return consumerLocalService.deleteConsumer(consumerId);
-    }
+		return consumerLocalService.deleteConsumer(consumerId);
+	}
 
-    @Override
-    public Consumer getConsumer(long companyId, String consumerKey)
-        throws SystemException {
+	@Override
+	public Consumer getConsumer(long companyId, String consumerKey)
+		throws SystemException {
 
-        return consumerLocalService.getConsumer(companyId, consumerKey);
-    }
+		return consumerLocalService.getConsumer(companyId, consumerKey);
+	}
 
-    @Override
-    public List<Consumer> getConsumers()
-        throws PortalException, SystemException {
+	@Override
+	public List<Consumer> getConsumers()
+		throws PortalException, SystemException {
 
-        return consumerLocalService.getConsumers();
-    }
+		return consumerLocalService.getConsumers();
+	}
 
-    @Override
-    public List<Consumer> getConsumers(
-            long companyId, ServiceContext serviceContext)
-        throws PortalException, SystemException {
+	@Override
+	public List<Consumer> getConsumers(
+			long companyId, ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
-        return consumerLocalService.getConsumers(companyId);
-    }
+		return consumerLocalService.getConsumers(companyId);
+	}
 
-    @Override
-    public Consumer updateConsumer(
-            long consumerId, String consumerKey,
-            Map<Locale, String> descriptionMap, Map<Locale, String> nameMap,
-            ServiceContext serviceContext)
-        throws PortalException, SystemException {
+	@Override
+	public Consumer updateConsumer(
+			long consumerId, String consumerKey,
+			Map<Locale, String> descriptionMap, Map<Locale, String> nameMap,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
-        ConsumerPermission.check(
-            getPermissionChecker(), consumerId, ActionKeys.UPDATE);
+		ConsumerPermission.check(
+			getPermissionChecker(), consumerId, ActionKeys.UPDATE);
 
-        return consumerLocalService.updateConsumer(
-            consumerId, consumerKey, descriptionMap,nameMap, serviceContext);
-    }
+		return consumerLocalService.updateConsumer(
+			consumerId, consumerKey, descriptionMap, nameMap, serviceContext);
+	}
+
 }

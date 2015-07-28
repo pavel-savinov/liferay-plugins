@@ -27,15 +27,18 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+
 import freemarker.cache.ClassTemplateLoader;
+
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 
 /**
  * @author Julio Camarero
@@ -157,7 +160,7 @@ public class ConsumerManagerContextUtil {
 			context.put(
 				"portalSettingsURL",
 				getControlPanelPortletURL(
-                    context, PortletKeys.PORTAL_SETTINGS, params));
+					context, PortletKeys.PORTAL_SETTINGS, params));
 		}
 	}
 
@@ -165,12 +168,12 @@ public class ConsumerManagerContextUtil {
 		Map<String, Object> context, Map<String, String> params) {
 
 		boolean hasSiteSettingsViewPermission =
-            hasControlPanelPortletViewPermission(
+			hasControlPanelPortletViewPermission(
 				context, PortletKeys.SITE_SETTINGS);
 
 		if (hasSiteSettingsViewPermission) {
 			context.put(
-                "siteSettingsURL", getSiteAdministrationPortletURL(
+				"siteSettingsURL", getSiteAdministrationPortletURL(
 					context, PortletKeys.SITE_SETTINGS, params));
 		}
 	}

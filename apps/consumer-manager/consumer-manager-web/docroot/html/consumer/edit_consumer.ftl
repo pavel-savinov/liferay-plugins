@@ -27,15 +27,15 @@
 <@aui["form"] action="${addConsumerURL}" method="post" name="fm" onSubmit="event.preventDefault(); saveFields();">
 	<@aui["input"] name="redirect" type="hidden" value="${redirect}" />
 	<@aui["input"] name="consumerId" type="hidden" value=consumerId />
-    <@aui["input"] name="consumerExtensions" type="hidden" />
+	<@aui["input"] name="consumerExtensions" type="hidden" />
 
 	<@aui["model-context"] bean=consumer model=consumerClass />
 
 	<@invalidNameException />
 
-    <@aui["input"] name="consumerKey" />
+	<@aui["input"] name="consumerKey" />
 
-    <@aui["input"] name="name" />
+	<@aui["input"] name="name" />
 
 	<@aui["input"] name="description" />
 

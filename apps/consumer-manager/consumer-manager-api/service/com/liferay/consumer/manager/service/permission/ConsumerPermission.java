@@ -50,8 +50,8 @@ public class ConsumerPermission {
 		PermissionChecker permissionChecker, Consumer consumer,
 		String actionId) {
 
-        return permissionChecker.hasPermission(
-            0, Consumer.class.getName(), consumer.getConsumerId(), actionId);
+		return permissionChecker.hasPermission(
+			0, Consumer.class.getName(), consumer.getConsumerId(), actionId);
 	}
 
 	public static boolean contains(
@@ -59,16 +59,16 @@ public class ConsumerPermission {
 			String actionId)
 		throws PortalException, SystemException {
 
-        if (consumerId > 0) {
-            Consumer consumer = ConsumerLocalServiceUtil
-                .getConsumer(consumerId);
+		if (consumerId > 0) {
+			Consumer consumer = ConsumerLocalServiceUtil.getConsumer(
+				consumerId);
 
-            return contains(permissionChecker, consumer, actionId);
-        }
-        else {
-            return permissionChecker.hasPermission(
-                0, Consumer.class.getName(), 0, actionId);
-        }
+			return contains(permissionChecker, consumer, actionId);
+		}
+		else {
+			return permissionChecker.hasPermission(
+				0, Consumer.class.getName(), 0, actionId);
+		}
 	}
 
 }

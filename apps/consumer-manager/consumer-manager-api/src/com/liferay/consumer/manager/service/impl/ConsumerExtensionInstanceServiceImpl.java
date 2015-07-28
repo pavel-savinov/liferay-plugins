@@ -39,78 +39,78 @@ import java.util.List;
  * @see com.liferay.consumer.manager.service.ConsumerExtensionInstanceServiceUtil
  */
 public class ConsumerExtensionInstanceServiceImpl
-    extends ConsumerExtensionInstanceServiceBaseImpl {
+	extends ConsumerExtensionInstanceServiceBaseImpl {
 
-    @Override
-    public ConsumerExtensionInstance addConsumerExtensionInstance(
-            String consumerExtensionKey, long consumerId, String typeSettings,
-            ServiceContext serviceContext)
-        throws PortalException, SystemException {
+	@Override
+	public ConsumerExtensionInstance addConsumerExtensionInstance(
+			String consumerExtensionKey, long consumerId, String typeSettings,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
-        ConsumerPermission.check(
-            getPermissionChecker(), consumerId, ActionKeys.UPDATE);
+		ConsumerPermission.check(
+			getPermissionChecker(), consumerId, ActionKeys.UPDATE);
 
-        return
-            consumerExtensionInstanceLocalService.addConsumerExtensionInstance(
-                consumerExtensionKey, consumerId, typeSettings, serviceContext);
-    }
+		return
+			consumerExtensionInstanceLocalService.addConsumerExtensionInstance(
+				consumerExtensionKey, consumerId, typeSettings, serviceContext);
+	}
 
-    @Override
-    public ConsumerExtensionInstance deleteConsumerExtensionInstance(
-            long consumerExtensionInstanceId)
-        throws PortalException, SystemException {
+	@Override
+	public ConsumerExtensionInstance deleteConsumerExtensionInstance(
+			long consumerExtensionInstanceId)
+		throws PortalException, SystemException {
 
-        ConsumerExtensionInstance consumerExtensionInstance =
-            consumerExtensionInstanceLocalService.getConsumerExtensionInstance(
-                consumerExtensionInstanceId);
+		ConsumerExtensionInstance consumerExtensionInstance =
+			consumerExtensionInstanceLocalService.getConsumerExtensionInstance(
+				consumerExtensionInstanceId);
 
-        ConsumerPermission.check(
-            getPermissionChecker(), consumerExtensionInstance.getConsumerId(),
-            ActionKeys.UPDATE);
+		ConsumerPermission.check(
+			getPermissionChecker(), consumerExtensionInstance.getConsumerId(),
+			ActionKeys.UPDATE);
 
-        return consumerExtensionInstanceLocalService.
-            deleteConsumerExtensionInstance(consumerExtensionInstanceId);
-    }
+		return consumerExtensionInstanceLocalService.
+			deleteConsumerExtensionInstance(consumerExtensionInstanceId);
+	}
 
-    @Override
-    public ConsumerExtensionInstance getConsumerExtensionInstance(
-            long consumerId, String consumerExtensionKey)
-        throws PortalException, SystemException {
+	@Override
+	public ConsumerExtensionInstance getConsumerExtensionInstance(
+			long consumerId, String consumerExtensionKey)
+		throws PortalException, SystemException {
 
-        ConsumerPermission.check(
-            getPermissionChecker(), consumerId, ActionKeys.VIEW_CONSUMERS);
+		ConsumerPermission.check(
+			getPermissionChecker(), consumerId, ActionKeys.VIEW_CONSUMERS);
 
-        return
-            consumerExtensionInstanceLocalService.getConsumerExtensionInstance(
-                consumerId, consumerExtensionKey);
-    }
+		return
+			consumerExtensionInstanceLocalService.getConsumerExtensionInstance(
+				consumerId, consumerExtensionKey);
+	}
 
-    @Override
-    public List<ConsumerExtensionInstance> getConsumerExtensionInstances(
-            long consumerId)
-        throws PortalException, SystemException {
+	@Override
+	public List<ConsumerExtensionInstance> getConsumerExtensionInstances(
+			long consumerId)
+		throws PortalException, SystemException {
 
-        ConsumerPermission.check(
-            getPermissionChecker(), consumerId, ActionKeys.VIEW_CONSUMERS);
+		ConsumerPermission.check(
+			getPermissionChecker(), consumerId, ActionKeys.VIEW_CONSUMERS);
 
-        return
-            consumerExtensionInstanceLocalService.getConsumerExtensionInstances(
-                consumerId);
-    }
+		return
+			consumerExtensionInstanceLocalService.getConsumerExtensionInstances(
+				consumerId);
+	}
 
-    @Override
-    public ConsumerExtensionInstance updateConsumerExtensionInstance(
-            long consumerExtensionInstanceId, String consumerExtensionKey,
-            long consumerId, String typeSettings,
-            ServiceContext serviceContext)
-        throws PortalException, SystemException {
+	@Override
+	public ConsumerExtensionInstance updateConsumerExtensionInstance(
+			long consumerExtensionInstanceId, String consumerExtensionKey,
+			long consumerId, String typeSettings, ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
-        ConsumerPermission.check(
-            getPermissionChecker(), consumerId, ActionKeys.UPDATE);
+		ConsumerPermission.check(
+			getPermissionChecker(), consumerId, ActionKeys.UPDATE);
 
-        return consumerExtensionInstanceLocalService.
-            updateConsumerExtensionInstance(
-                consumerExtensionInstanceId, consumerExtensionKey, consumerId,
-                typeSettings, serviceContext);
-    }
+		return consumerExtensionInstanceLocalService.
+			updateConsumerExtensionInstance(
+				consumerExtensionInstanceId, consumerExtensionKey, consumerId,
+				typeSettings, serviceContext);
+	}
+
 }

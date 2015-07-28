@@ -17,47 +17,47 @@ package com.liferay.consumer.manager.internal;
 import com.liferay.consumer.manager.api.model.ConsumerExtension;
 import com.liferay.consumer.manager.api.model.ConsumerExtensionsRegistry;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Pavel Savinov
  */
 @Component
 public class DefaultConsumerExtensionsRegistryImpl
-    implements ConsumerExtensionsRegistry {
+	implements ConsumerExtensionsRegistry {
 
-    @Override
-    public ConsumerExtension getConsumerExtension(String ruleKey) {
-        return _consumerExtensions.get(ruleKey);
-    }
+	@Override
+	public ConsumerExtension getConsumerExtension(String ruleKey) {
+		return _consumerExtensions.get(ruleKey);
+	}
 
-    @Override
-    public Map<String, ConsumerExtension> getConsumerExtensions() {
-        return _consumerExtensions;
-    }
+	@Override
+	public Map<String, ConsumerExtension> getConsumerExtensions() {
+		return _consumerExtensions;
+	}
 
-    @Reference(
-        unbind = "unregisterConsumerExtension",
-        cardinality = ReferenceCardinality.MULTIPLE,
-        policy = ReferencePolicy.DYNAMIC)
-    public void registerConsumerExtension(ConsumerExtension consumerExtension) {
-        _consumerExtensions.put(
-            consumerExtension.getConsumerExtensionKey(), consumerExtension);
-    }
+	@Reference(
+		unbind = "unregisterConsumerExtension",
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC)
+	public void registerConsumerExtension(ConsumerExtension consumerExtension) {
+		_consumerExtensions.put(
+			consumerExtension.getConsumerExtensionKey(), consumerExtension);
+	}
 
-    public void unregisterConsumerExtension(
-        ConsumerExtension consumerExtension) {
+	public void unregisterConsumerExtension(
+		ConsumerExtension consumerExtension) {
 
-        _consumerExtensions.remove(consumerExtension);
-    }
+		_consumerExtensions.remove(consumerExtension);
+	}
 
-    private Map<String, ConsumerExtension> _consumerExtensions =
-        new ConcurrentHashMap<String, ConsumerExtension>();
+	private Map<String, ConsumerExtension> _consumerExtensions =
+		new ConcurrentHashMap<String, ConsumerExtension>();
 
 }

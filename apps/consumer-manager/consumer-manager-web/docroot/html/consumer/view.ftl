@@ -15,4 +15,3 @@
 -->
 
 <#include "../init.ftl" />
-

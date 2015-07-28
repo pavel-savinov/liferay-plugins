@@ -19,7 +19,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Brian Wing Shun Chan
  */
-public class DuplicateConsumerExtensionInstanceException extends PortalException {
+public class DuplicateConsumerExtensionInstanceException
+	extends PortalException {
 
 	public DuplicateConsumerExtensionInstanceException() {
 		super();
@@ -30,7 +31,7 @@ public class DuplicateConsumerExtensionInstanceException extends PortalException
 	}
 
 	public DuplicateConsumerExtensionInstanceException(
-        String msg, Throwable cause) {
+		String msg, Throwable cause) {
 
 		super(msg, cause);
 	}

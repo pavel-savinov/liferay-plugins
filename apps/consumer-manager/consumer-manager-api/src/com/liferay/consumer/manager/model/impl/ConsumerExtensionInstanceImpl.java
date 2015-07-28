@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.consumer.manager.model.impl;
 
 import java.util.Map;
@@ -12,28 +26,28 @@ import java.util.Map;
  * @author Brian Wing Shun Chan
  */
 public class ConsumerExtensionInstanceImpl
-    extends ConsumerExtensionInstanceBaseImpl {
+	extends ConsumerExtensionInstanceBaseImpl {
 
-    public ConsumerExtensionInstanceImpl() {
-    }
+	public ConsumerExtensionInstanceImpl() {
+	}
 
-    public String getConsumerExtensionGuid() {
-        return _consumerExtensionGuid;
-    }
+	public String getConsumerExtensionGuid() {
+		return _consumerExtensionGuid;
+	}
 
-    public Map<String, String> getValues() {
-        return _values;
-    }
+	public Map<String, String> getValues() {
+		return _values;
+	}
 
-    public void setConsumerExtensionGuid(String consumerExtensionGuid) {
-        _consumerExtensionGuid = consumerExtensionGuid;
-    }
+	public void setConsumerExtensionGuid(String consumerExtensionGuid) {
+		_consumerExtensionGuid = consumerExtensionGuid;
+	}
 
-    public void setValues(Map<String, String> values) {
-        this._values = values;
-    }
+	public void setValues(Map<String, String> values) {
+		this._values = values;
+	}
 
-    private String _consumerExtensionGuid;
-    private Map<String, String> _values;
-    
+	private String _consumerExtensionGuid;
+	private Map<String, String> _values;
+
 }

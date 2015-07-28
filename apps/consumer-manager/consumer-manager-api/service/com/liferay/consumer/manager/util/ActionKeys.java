@@ -22,6 +22,6 @@ public class ActionKeys
 
 	public static final String ADD_CONSUMER = "ADD_CONSUMER";
 
-    public static final String VIEW_CONSUMERS = "VIEW_CONSUMERS";
+	public static final String VIEW_CONSUMERS = "VIEW_CONSUMERS";
 
 }

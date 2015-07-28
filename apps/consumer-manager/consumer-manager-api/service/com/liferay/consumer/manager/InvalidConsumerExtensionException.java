@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,26 +21,26 @@ import com.liferay.portal.kernel.exception.PortalException;
  */
 public class InvalidConsumerExtensionException extends PortalException {
 
-    public InvalidConsumerExtensionException() {
-        super();
-    }
+	public InvalidConsumerExtensionException() {
+		super();
+	}
 
-    public InvalidConsumerExtensionException(String msg) {
-        super(msg);
-    }
+	public InvalidConsumerExtensionException(String msg) {
+		super(msg);
+	}
 
-    public InvalidConsumerExtensionException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
+	public InvalidConsumerExtensionException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
-    public String getConsumerExtensionGuid() {
-        return _consumerExtensionGuid;
-    }
+	public String getConsumerExtensionGuid() {
+		return _consumerExtensionGuid;
+	}
 
-    public void setConsumerExtensionGuid(String consumerExtensionGuid) {
-        _consumerExtensionGuid = consumerExtensionGuid;
-    }
+	public void setConsumerExtensionGuid(String consumerExtensionGuid) {
+		_consumerExtensionGuid = consumerExtensionGuid;
+	}
 
-    private String _consumerExtensionGuid;
+	private String _consumerExtensionGuid;
 
 }

@@ -33,6 +33,7 @@ import freemarker.template.ObjectWrapper;
 
 import java.io.IOException;
 import java.io.Writer;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,15 +54,15 @@ import javax.servlet.http.HttpServletResponseWrapper;
 public class FreeMarkerPortlet
 	extends com.liferay.util.bridges.freemarker.FreeMarkerPortlet {
 
-    protected Map<String, Object> cloneTemplateContext(Template template) {
-        Map<String, Object> context = new HashMap<String, Object>();
+	protected Map<String, Object> cloneTemplateContext(Template template) {
+		Map<String, Object> context = new HashMap<String, Object>();
 
-        for (String key : template.getKeys()) {
-            context.put(key, template.get(key));
-        }
+		for (String key : template.getKeys()) {
+			context.put(key, template.get(key));
+		}
 
-        return context;
-    }
+		return context;
+	}
 
 	@Override
 	protected void include(

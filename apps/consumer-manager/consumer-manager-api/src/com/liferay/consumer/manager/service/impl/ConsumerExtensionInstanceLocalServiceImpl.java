@@ -42,113 +42,110 @@ import java.util.List;
  * @see com.liferay.consumer.manager.service.ConsumerExtensionInstanceLocalServiceUtil
  */
 public class ConsumerExtensionInstanceLocalServiceImpl
-    extends ConsumerExtensionInstanceLocalServiceBaseImpl {
+	extends ConsumerExtensionInstanceLocalServiceBaseImpl {
 
-    @Override
-    public ConsumerExtensionInstance addConsumerExtensionInstance(
-            String consumerExtensionKey, long consumerId, String typeSettings,
-            ServiceContext serviceContext)
-        throws PortalException, SystemException {
+	@Override
+	public ConsumerExtensionInstance addConsumerExtensionInstance(
+			String consumerExtensionKey, long consumerId, String typeSettings,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
-        ConsumerExtensionInstance checkConsumerExtensionInstance =
-            consumerExtensionInstancePersistence.fetchByK_C(
-                consumerExtensionKey, consumerId);
+		ConsumerExtensionInstance checkConsumerExtensionInstance =
+			consumerExtensionInstancePersistence.fetchByK_C(
+				consumerExtensionKey, consumerId);
 
-        if (checkConsumerExtensionInstance != null) {
-            throw new DuplicateConsumerExtensionInstanceException();
-        }
+		if (checkConsumerExtensionInstance != null) {
+			throw new DuplicateConsumerExtensionInstanceException();
+		}
 
-        User user = UserLocalServiceUtil
-            .getUser(serviceContext.getUserId());
+		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
 
-        Date now = new Date();
+		Date now = new Date();
 
-        long consumerExtensionInstanceId =
-            CounterLocalServiceUtil.increment();
+		long consumerExtensionInstanceId = CounterLocalServiceUtil.increment();
 
-        ConsumerExtensionInstance consumerExtensionInstance =
-            consumerExtensionInstancePersistence.create(
-                consumerExtensionInstanceId);
+		ConsumerExtensionInstance consumerExtensionInstance =
+			consumerExtensionInstancePersistence.create(
+				consumerExtensionInstanceId);
 
-        consumerExtensionInstance.setUuid(serviceContext.getUuid());
-        consumerExtensionInstance.setCompanyId(user.getCompanyId());
-        consumerExtensionInstance.setUserId(user.getUserId());
-        consumerExtensionInstance.setUserName(user.getFullName());
-        consumerExtensionInstance.setCreateDate(
-            serviceContext.getCreateDate(now));
-        consumerExtensionInstance.setModifiedDate(
-            serviceContext.getModifiedDate(now));
+		consumerExtensionInstance.setUuid(serviceContext.getUuid());
+		consumerExtensionInstance.setCompanyId(user.getCompanyId());
+		consumerExtensionInstance.setUserId(user.getUserId());
+		consumerExtensionInstance.setUserName(user.getFullName());
+		consumerExtensionInstance.setCreateDate(
+			serviceContext.getCreateDate(now));
+		consumerExtensionInstance.setModifiedDate(
+			serviceContext.getModifiedDate(now));
 
-        consumerExtensionInstance.setConsumerExtensionKey(consumerExtensionKey);
-        consumerExtensionInstance.setConsumerId(consumerId);
-        consumerExtensionInstance.setTypeSettings(typeSettings);
+		consumerExtensionInstance.setConsumerExtensionKey(consumerExtensionKey);
+		consumerExtensionInstance.setConsumerId(consumerId);
+		consumerExtensionInstance.setTypeSettings(typeSettings);
 
-        consumerExtensionInstancePersistence.update(consumerExtensionInstance);
+		consumerExtensionInstancePersistence.update(consumerExtensionInstance);
 
-        return consumerExtensionInstance;
-    }
+		return consumerExtensionInstance;
+	}
 
-    @Override
-    public ConsumerExtensionInstance deleteConsumerExtensionInstance(
-            long consumerExtensionInstanceId)
-        throws PortalException, SystemException {
+	@Override
+	public ConsumerExtensionInstance deleteConsumerExtensionInstance(
+			long consumerExtensionInstanceId)
+		throws PortalException, SystemException {
 
-        return consumerExtensionInstancePersistence.remove(
-            consumerExtensionInstanceId);
-    }
+		return consumerExtensionInstancePersistence.remove(
+			consumerExtensionInstanceId);
+	}
 
-    @Override
-    public ConsumerExtensionInstance getConsumerExtensionInstance(
-            long consumerId, String consumerExtensionKey)
-        throws SystemException {
+	@Override
+	public ConsumerExtensionInstance getConsumerExtensionInstance(
+			long consumerId, String consumerExtensionKey)
+		throws SystemException {
 
-        return consumerExtensionInstancePersistence.fetchByK_C(
-            consumerExtensionKey, consumerId);
-    }
+		return consumerExtensionInstancePersistence.fetchByK_C(
+			consumerExtensionKey, consumerId);
+	}
 
-    @Override
-    public List<ConsumerExtensionInstance> getConsumerExtensionInstances(
-            long consumerId)
-        throws SystemException {
+	@Override
+	public List<ConsumerExtensionInstance> getConsumerExtensionInstances(
+			long consumerId)
+		throws SystemException {
 
-        return consumerExtensionInstancePersistence.findByConsumerId(
-            consumerId);
-    }
+		return consumerExtensionInstancePersistence.findByConsumerId(
+			consumerId);
+	}
 
-    @Override
-    public ConsumerExtensionInstance updateConsumerExtensionInstance(
-            long consumerExtensionInstanceId, String consumerExtensionKey,
-            long consumerId, String typeSettings,
-            ServiceContext serviceContext)
-        throws PortalException, SystemException {
+	@Override
+	public ConsumerExtensionInstance updateConsumerExtensionInstance(
+			long consumerExtensionInstanceId, String consumerExtensionKey,
+			long consumerId, String typeSettings, ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
-        ConsumerExtensionInstance checkConsumerExtensionInstance =
-            consumerExtensionInstancePersistence.fetchByK_C(
-                consumerExtensionKey, consumerId);
+		ConsumerExtensionInstance checkConsumerExtensionInstance =
+			consumerExtensionInstancePersistence.fetchByK_C(
+				consumerExtensionKey, consumerId);
 
-        if ((checkConsumerExtensionInstance != null) &&
-            (checkConsumerExtensionInstance.getConsumerExtensionInstanceId() !=
-                consumerExtensionInstanceId)) {
+		if ((checkConsumerExtensionInstance != null) &&
+			(checkConsumerExtensionInstance.getConsumerExtensionInstanceId() !=
+				consumerExtensionInstanceId)) {
 
-            throw new DuplicateConsumerExtensionInstanceException();
-        }
+			throw new DuplicateConsumerExtensionInstanceException();
+		}
 
-        Date now = new Date();
+		Date now = new Date();
 
-        ConsumerExtensionInstance consumerExtensionInstance =
-            consumerExtensionInstancePersistence.findByPrimaryKey(
-                consumerExtensionInstanceId);
+		ConsumerExtensionInstance consumerExtensionInstance =
+			consumerExtensionInstancePersistence.findByPrimaryKey(
+				consumerExtensionInstanceId);
 
-        consumerExtensionInstance.setModifiedDate(
-            serviceContext.getModifiedDate(now));
+		consumerExtensionInstance.setModifiedDate(
+			serviceContext.getModifiedDate(now));
 
-        consumerExtensionInstance.setConsumerExtensionKey(consumerExtensionKey);
-        consumerExtensionInstance.setConsumerId(consumerId);
-        consumerExtensionInstance.setTypeSettings(typeSettings);
+		consumerExtensionInstance.setConsumerExtensionKey(consumerExtensionKey);
+		consumerExtensionInstance.setConsumerId(consumerId);
+		consumerExtensionInstance.setTypeSettings(typeSettings);
 
-        consumerExtensionInstancePersistence.update(consumerExtensionInstance);
+		consumerExtensionInstancePersistence.update(consumerExtensionInstance);
 
-        return consumerExtensionInstance;
-    }
+		return consumerExtensionInstance;
+	}
 
 }

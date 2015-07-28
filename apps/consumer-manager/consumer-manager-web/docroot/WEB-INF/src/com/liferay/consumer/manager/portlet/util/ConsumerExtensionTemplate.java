@@ -23,6 +23,10 @@ import com.liferay.portal.kernel.util.Validator;
  */
 public class ConsumerExtensionTemplate {
 
+	public ConsumerExtension getConsumerExtension() {
+		return _consumerExtension;
+	}
+
 	public String getInstanceId() {
 		return _instanceId;
 	}
@@ -42,8 +46,8 @@ public class ConsumerExtensionTemplate {
 		return templateKey;
 	}
 
-	public ConsumerExtension getConsumerExtension() {
-		return _consumerExtension;
+	public void setConsumerExtension(ConsumerExtension consumerExtension) {
+		_consumerExtension = consumerExtension;
 	}
 
 	public void setInstanceId(String instanceId) {
@@ -54,12 +58,8 @@ public class ConsumerExtensionTemplate {
 		_template = template;
 	}
 
-	public void setConsumerExtension(ConsumerExtension consumerExtension) {
-        _consumerExtension = consumerExtension;
-	}
-
+	private ConsumerExtension _consumerExtension;
 	private String _instanceId;
 	private String _template;
-	private ConsumerExtension _consumerExtension;
 
 }

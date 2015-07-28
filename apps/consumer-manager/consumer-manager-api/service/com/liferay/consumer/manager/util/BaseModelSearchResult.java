@@ -17,6 +17,7 @@ package com.liferay.consumer.manager.util;
 import com.liferay.portal.model.BaseModel;
 
 import java.io.Serializable;
+
 import java.util.List;
 
 /**

@@ -11,7 +11,7 @@
 	<property file="sonar.properties" />
 
 	<property name="app.core" value="*-api,*-service,*-web,runtime-dependencies" />
-    <property name="app.services" value="consumer-manager-api" />
+	<property name="app.services" value="consumer-manager-api" />
 
 	<target name="all">
 		<antcall target="release" />

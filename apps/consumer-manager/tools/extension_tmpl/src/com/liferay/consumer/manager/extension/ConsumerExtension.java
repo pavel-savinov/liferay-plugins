@@ -15,7 +15,6 @@
 package com.liferay.consumer.manager.extension.@extension.java.package.name@;
 
 import com.liferay.consumer.manager.api.model.BaseConsumerExtension;
-import com.liferay.consumer.manager.api.model.ConsumerExtension;
 import com.liferay.consumer.manager.model.ConsumerExtensionInstance;
 import com.liferay.portal.kernel.language.LanguageUtil;
 
@@ -30,7 +29,8 @@ import org.osgi.service.component.annotations.Deactivate;
  * @author Brian Chan
  */
 @Component(immediate = true, service = ConsumerExtension.class)
-public class @extension.java.class.name@ConsumerExtension extends BaseConsumerExtension {
+public class @extension.java.class.name@ConsumerExtension
+	extends BaseConsumerExtension {
 
 	@Activate
 	@Override
@@ -50,14 +50,16 @@ public class @extension.java.class.name@ConsumerExtension extends BaseConsumerEx
 	}
 
 	@Override
-	public String getSummary(ConsumerExtensionInstance extensionInstance, Locale locale) {
+	public String getSummary(
+		ConsumerExtensionInstance extensionInstance, Locale locale) {
+
 		return LanguageUtil.get(locale, extensionInstance.getTypeSettings());
 	}
 
 	@Override
 	protected void populateContext(
-		ConsumerExtensionInstance extensionInstance, Map<String, Object> context,
-		Map<String, String> values) {
+		ConsumerExtensionInstance extensionInstance,
+		Map<String, Object> context, Map<String, String> values) {
 	}
 
 }

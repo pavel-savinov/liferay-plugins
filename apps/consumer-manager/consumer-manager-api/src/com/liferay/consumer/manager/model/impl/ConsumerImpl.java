@@ -24,11 +24,5 @@ package com.liferay.consumer.manager.model.impl;
  * @author Brian Wing Shun Chan
  */
 public class ConsumerImpl extends ConsumerBaseImpl {
-    /*
-     * NOTE FOR DEVELOPERS:
-     *
-     * Never reference this class directly. All methods that expect a consumer model instance should use the {@link com.liferay.consumer.manager.model.Consumer} interface instead.
-     */
-    public ConsumerImpl() {
-    }
+
 }

@@ -17,22 +17,22 @@ package com.liferay.consumer.manager.portlet;
 import com.liferay.consumer.manager.DuplicateConsumerExtensionInstanceException;
 import com.liferay.consumer.manager.InvalidConsumerExtensionException;
 import com.liferay.consumer.manager.InvalidConsumerExtensionsException;
+import com.liferay.consumer.manager.InvalidNameException;
 import com.liferay.consumer.manager.api.model.ConsumerExtension;
 import com.liferay.consumer.manager.api.model.ConsumerExtensionsRegistry;
+import com.liferay.consumer.manager.model.Consumer;
 import com.liferay.consumer.manager.model.ConsumerExtensionInstance;
 import com.liferay.consumer.manager.portlet.util.ConsumerExtensionTemplate;
 import com.liferay.consumer.manager.service.ConsumerExtensionInstanceLocalService;
 import com.liferay.consumer.manager.service.ConsumerExtensionInstanceService;
+import com.liferay.consumer.manager.service.ConsumerLocalService;
 import com.liferay.consumer.manager.service.ConsumerLocalServiceUtil;
-import com.liferay.consumer.manager.util.ConsumerManagerContextUtil;
-import com.liferay.consumer.manager.util.ConsumerSearchContainerIterator;
-import com.liferay.consumer.manager.InvalidNameException;
-import com.liferay.osgi.util.service.ServiceTrackerUtil;
-import com.liferay.consumer.manager.model.Consumer;
 import com.liferay.consumer.manager.service.permission.ConsumerManagerPermission;
 import com.liferay.consumer.manager.service.permission.ConsumerPermission;
 import com.liferay.consumer.manager.util.ActionKeys;
-import com.liferay.consumer.manager.service.ConsumerLocalService;
+import com.liferay.consumer.manager.util.ConsumerManagerContextUtil;
+import com.liferay.consumer.manager.util.ConsumerSearchContainerIterator;
+import com.liferay.osgi.util.service.ServiceTrackerUtil;
 import com.liferay.portal.kernel.dao.search.RowChecker;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -76,6 +76,7 @@ import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.UnavailableException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.framework.Bundle;
@@ -86,76 +87,6 @@ import org.osgi.framework.FrameworkUtil;
  * @author Carlos Sierra Andrés
  */
 public class ConsumerManagerPortlet extends FreeMarkerPortlet {
-
-	@Override
-	public void init() throws PortletException {
-		super.init();
-
-		Bundle bundle = FrameworkUtil.getBundle(getClass());
-
-		if (bundle == null) {
-			throw new UnavailableException(
-				"Can't find a reference to the OSGi bundle") {
-
-				@Override
-				public boolean isPermanent() {
-					return true;
-				}
-			};
-		}
-        
-        _consumerExtensionInstanceService = ServiceTrackerUtil.getService(
-            ConsumerExtensionInstanceService.class,
-            bundle.getBundleContext());
-        _consumerExtensionInstanceLocalService = ServiceTrackerUtil.getService(
-            ConsumerExtensionInstanceLocalService.class,
-            bundle.getBundleContext());
-        _consumerExtensionsRegistry = ServiceTrackerUtil.getService(
-            ConsumerExtensionsRegistry.class, bundle.getBundleContext());
-		_consumerLocalService = ServiceTrackerUtil.getService(
-			ConsumerLocalService.class, bundle.getBundleContext());
-	}
-
-	@Override
-	protected void populateContext(
-			String path, PortletRequest portletRequest,
-			PortletResponse portletResponse, Template template)
-		throws Exception {
-
-		BeansWrapper wrapper = BeansWrapper.getDefaultInstance();
-
-		TemplateHashModel staticModels = wrapper.getStaticModels();
-
-		template.put("actionKeys",
-            staticModels.get(ActionKeys.class.getName()));
-        template.put("consumerClass", Consumer.class);
-        template.put("consumerManagerPath",
-            staticModels.get(ConsumerManagerPath.class.getName()));
-		template.put("consumerManagerPermission",
-            staticModels.get(ConsumerManagerPermission.class.getName()));
-		template.put("consumerPermission",
-            staticModels.get(ConsumerPermission.class.getName()));
-		template.put("consumersRowChecker", new RowChecker(portletResponse));
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		String keywords = ParamUtil.getString(portletRequest, "keywords");
-		
-		Bundle bundle = FrameworkUtil.getBundle(getClass());
-
-		template.put("consumerSearchContainerIterator", 
-			new ConsumerSearchContainerIterator(
-				themeDisplay.getCompanyId(), keywords, _consumerLocalService));
-				
-		template.put("currentURL", PortalUtil.getCurrentURL(portletRequest));
-
-		template.put(
-			"redirect", ParamUtil.getString(portletRequest, "redirect"));
-
-        populateViewContext(
-            path, portletRequest, portletResponse, template, staticModels);
-	}
 
 	public void deleteConsumer(ActionRequest request, ActionResponse response)
 		throws Exception {
@@ -186,15 +117,43 @@ public class ConsumerManagerPortlet extends FreeMarkerPortlet {
 		}
 	}
 
+	@Override
+	public void init() throws PortletException {
+		super.init();
+
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
+
+		if (bundle == null) {
+			throw new UnavailableException(
+				"Can't find a reference to the OSGi bundle") {
+
+				@Override
+				public boolean isPermanent() {
+					return true;
+				}
+			};
+		}
+
+		_consumerExtensionInstanceService = ServiceTrackerUtil.getService(
+			ConsumerExtensionInstanceService.class, bundle.getBundleContext());
+		_consumerExtensionInstanceLocalService = ServiceTrackerUtil.getService(
+			ConsumerExtensionInstanceLocalService.class,
+			bundle.getBundleContext());
+		_consumerExtensionsRegistry = ServiceTrackerUtil.getService(
+			ConsumerExtensionsRegistry.class, bundle.getBundleContext());
+		_consumerLocalService = ServiceTrackerUtil.getService(
+			ConsumerLocalService.class, bundle.getBundleContext());
+	}
+
 	public void updateConsumer(ActionRequest request, ActionResponse response)
 		throws Exception {
 
 		long consumerId = ParamUtil.getLong(request, "consumerId");
 
-        String consumerKey = ParamUtil.getString(request, "consumerKey");
+		String consumerKey = ParamUtil.getString(request, "consumerKey");
 
-        Map<Locale, String> nameMap =
-            LocalizationUtil.getLocalizationMap(request, "name");
+		Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
+			request, "name");
 
 		Map<Locale, String> descriptionMap =
 			LocalizationUtil.getLocalizationMap(request, "description");
@@ -206,27 +165,26 @@ public class ConsumerManagerPortlet extends FreeMarkerPortlet {
 			Consumer.class.getName(), request);
 
 		try {
-            
-            Consumer consumer = null;
-            
+			Consumer consumer = null;
+
 			if (consumerId == 0) {
 				consumer = _consumerLocalService.addConsumer(
-                    consumerKey, descriptionMap, nameMap, serviceContext);
+					consumerKey, descriptionMap, nameMap, serviceContext);
 			}
 			else {
 				consumer = _consumerLocalService.updateConsumer(
-                    consumerId, consumerKey, descriptionMap, nameMap,
-                    serviceContext);
+					consumerId, consumerKey, descriptionMap, nameMap,
+					serviceContext);
 			}
-            
-            List<InvalidConsumerExtensionException> consumerExtensionExceptions =
-                updateConsumerExtensions(
-                    consumer.getConsumerId(), request, response);
 
-            if (!consumerExtensionExceptions.isEmpty()) {
-                throw new InvalidConsumerExtensionsException(
-                    consumerExtensionExceptions);
-            }
+			List<InvalidConsumerExtensionException>
+				consumerExtensionExceptions = updateConsumerExtensions(
+					consumer.getConsumerId(), request, response);
+
+			if (!consumerExtensionExceptions.isEmpty()) {
+				throw new InvalidConsumerExtensionsException(
+					consumerExtensionExceptions);
+			}
 
 			sendRedirect(request, response);
 		}
@@ -258,396 +216,449 @@ public class ConsumerManagerPortlet extends FreeMarkerPortlet {
 		}
 	}
 
-    protected void deleteConsumerExtensionInstances(
-        List<ConsumerExtensionInstance> consumerExtensionInstances)
-        throws Exception {
+	protected void deleteConsumerExtensionInstances(
+			List<ConsumerExtensionInstance> consumerExtensionInstances)
+		throws Exception {
 
-        for (ConsumerExtensionInstance
-            consumerExtensionInstance : consumerExtensionInstances) {
+		for (ConsumerExtensionInstance
+			consumerExtensionInstance : consumerExtensionInstances) {
 
-            _consumerExtensionInstanceService.deleteConsumerExtensionInstance(
-                consumerExtensionInstance.getConsumerExtensionInstanceId());
-        }
-    }
+			_consumerExtensionInstanceService.deleteConsumerExtensionInstance(
+				consumerExtensionInstance.getConsumerExtensionInstanceId());
+		}
+	}
 
-    protected List<ConsumerExtensionInstance> getConsumerExtensionsFromRequest(
-            PortletRequest request, PortletResponse response)
-        throws Exception {
+	protected String getConsumerExtensionHtml(
+		ConsumerExtension consumerExtension,
+		ConsumerExtensionInstance consumerExtensionInstance, Template template,
+		Map<String, String> values,
+		List<InvalidConsumerExtensionException> exceptions) {
 
-        List<ConsumerExtensionInstance> consumerExtensionsInstances =
-            new ArrayList<ConsumerExtensionInstance>();
+		Map<String, Object> context = cloneTemplateContext(template);
 
-        String campaignConsumerExtensions = ParamUtil.getString(
-            request, "consumerExtensions");
+		String html = StringPool.BLANK;
 
-        if (Validator.isNull(campaignConsumerExtensions)) {
-            return consumerExtensionsInstances;
-        }
+		if ((exceptions != null) && !exceptions.isEmpty()) {
+			try {
+				context.put("exceptions", exceptions);
 
-        JSONObject jSONObject = JSONFactoryUtil.createJSONObject(
-            campaignConsumerExtensions);
+				html += ConsumerManagerContextUtil.parseTemplate(
+					getClass(), "templates/ct_exceptions.ftl", context);
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
+		}
 
-        String consumerExtensions = jSONObject.getString("fields");
+		HttpServletRequest request = (HttpServletRequest)context.get("request");
 
-        JSONArray jSONArray = JSONFactoryUtil.createJSONArray(consumerExtensions);
+		Map<String, List<ValidatorTag>> validatorTagsMap =
+			new HashMap<String, List<ValidatorTag>>();
 
-        for (int i = 0; i < jSONArray.length(); i++) {
-            JSONObject jSONObjectConsumerExtension = jSONArray.getJSONObject(i);
+		request.setAttribute("aui:form:validatorTagsMap", validatorTagsMap);
 
-            long consumerExtensionInstanceId = 0;
-            String type = jSONObjectConsumerExtension.getString("type");
+		if (values == null) {
+			values = Collections.emptyMap();
+		}
 
-            if (type.contains(StringPool.UNDERLINE)) {
-                String[] ids = type.split(StringPool.UNDERLINE);
+		html += consumerExtension.getFormHTML(
+			consumerExtensionInstance, context, values);
 
-                consumerExtensionInstanceId = GetterUtil.getLong(ids[1]);
-                type = ids[0];
-            }
+		if (!validatorTagsMap.isEmpty()) {
+			try {
+				context.put("validatorTagsMap", validatorTagsMap);
 
-            String id = jSONObjectConsumerExtension.getString("id");
+				html += ConsumerManagerContextUtil.parseTemplate(
+					getClass(), "templates/ct_validators.ftl", context);
+			}
+			catch (Exception e) {
+				_log.error(e);
+			}
+		}
 
-            Map<String, String> consumerExtensionValues = getJSONValues(
-                jSONObjectConsumerExtension.getJSONArray("data"),
-                response.getNamespace(), id);
+		return html;
+	}
 
-            ConsumerExtensionInstance consumerExtensionInstance =
-                _consumerExtensionInstanceLocalService.
-                    createConsumerExtensionInstance(consumerExtensionInstanceId);
+	protected List<ConsumerExtensionInstance> getConsumerExtensionsFromRequest(
+			PortletRequest request, PortletResponse response)
+		throws Exception {
 
-            consumerExtensionInstance.setConsumerExtensionKey(type);
-            consumerExtensionInstance.setValues(consumerExtensionValues);
-            consumerExtensionInstance.setConsumerExtensionGuid(id);
+		List<ConsumerExtensionInstance> consumerExtensionsInstances =
+			new ArrayList<ConsumerExtensionInstance>();
 
-            consumerExtensionsInstances.add(consumerExtensionInstance);
-        }
+		String campaignConsumerExtensions = ParamUtil.getString(
+			request, "consumerExtensions");
 
-        return consumerExtensionsInstances;
-    }
+		if (Validator.isNull(campaignConsumerExtensions)) {
+			return consumerExtensionsInstances;
+		}
 
-    protected String getConsumerExtensionHtml(
-        ConsumerExtension consumerExtension,
-        ConsumerExtensionInstance consumerExtensionInstance, Template template,
-        Map<String, String> values,
-        List<InvalidConsumerExtensionException> exceptions) {
+		JSONObject jSONObject = JSONFactoryUtil.createJSONObject(
+			campaignConsumerExtensions);
 
-        Map<String, Object> context = cloneTemplateContext(template);
+		String consumerExtensions = jSONObject.getString("fields");
 
-        String html = StringPool.BLANK;
+		JSONArray jSONArray = JSONFactoryUtil.createJSONArray(
+			consumerExtensions);
 
-        if ((exceptions != null) && !exceptions.isEmpty()) {
-            try {
-                context.put("exceptions", exceptions);
+		for (int i = 0; i < jSONArray.length(); i++) {
+			JSONObject jSONObjectConsumerExtension = jSONArray.getJSONObject(i);
 
-                html += ConsumerManagerContextUtil.parseTemplate(
-                    getClass(), "templates/ct_exceptions.ftl", context);
-            }
-            catch (Exception e) {
-                _log.error(e);
-            }
-        }
+			long consumerExtensionInstanceId = 0;
+			String type = jSONObjectConsumerExtension.getString("type");
 
-        HttpServletRequest request = (HttpServletRequest)context.get("request");
+			if (type.contains(StringPool.UNDERLINE)) {
+				String[] ids = type.split(StringPool.UNDERLINE);
 
-        Map<String, List<ValidatorTag>> validatorTagsMap =
-            new HashMap<String, List<ValidatorTag>>();
+				consumerExtensionInstanceId = GetterUtil.getLong(ids[1]);
+				type = ids[0];
+			}
 
-        request.setAttribute("aui:form:validatorTagsMap", validatorTagsMap);
+			String id = jSONObjectConsumerExtension.getString("id");
 
-        if (values == null) {
-            values = Collections.emptyMap();
-        }
+			Map<String, String> consumerExtensionValues = getJSONValues(
+				jSONObjectConsumerExtension.getJSONArray("data"),
+				response.getNamespace(), id);
 
-        html += consumerExtension.getFormHTML(
-            consumerExtensionInstance, context, values);
+			ConsumerExtensionInstance consumerExtensionInstance =
+				_consumerExtensionInstanceLocalService.
+					createConsumerExtensionInstance(
+						consumerExtensionInstanceId);
 
-        if (!validatorTagsMap.isEmpty()) {
-            try {
-                context.put("validatorTagsMap", validatorTagsMap);
+			consumerExtensionInstance.setConsumerExtensionKey(type);
+			consumerExtensionInstance.setValues(consumerExtensionValues);
+			consumerExtensionInstance.setConsumerExtensionGuid(id);
 
-                html += ConsumerManagerContextUtil.parseTemplate(
-                    getClass(), "templates/ct_validators.ftl", context);
-            }
-            catch (Exception e) {
-                _log.error(e);
-            }
-        }
+			consumerExtensionsInstances.add(consumerExtensionInstance);
+		}
 
-        return html;
-    }
+		return consumerExtensionsInstances;
+	}
 
-    protected InvalidConsumerExtensionsException
-        getInvalidConsumerExtensionsException(
-            PortletRequest portletRequest) {
+	protected Map<String, String> getJSONValues(
+		JSONArray data, String namespace, String id) {
 
-        if (SessionErrors.contains(
-            portletRequest,
-            InvalidConsumerExtensionsException.class.getName())) {
+		Map<String, String> values = new HashMap<String, String>(data.length());
 
-            return (InvalidConsumerExtensionsException)SessionErrors.get(
-                portletRequest,
-                InvalidConsumerExtensionsException.class.getName());
-        }
-        else {
-            return new InvalidConsumerExtensionsException();
-        }
-    }
+		for (int i = 0; i < data.length(); i++) {
+			JSONObject jsonObject = data.getJSONObject(i);
 
-    protected Map<String, String> getJSONValues(
-        JSONArray data, String namespace, String id) {
+			String name = jsonObject.getString("name");
 
-        Map<String, String> values = new HashMap<String, String>(data.length());
+			name = StringUtil.replace(
+				name, new String[]{namespace, id},
+				new String[]{StringPool.BLANK, StringPool.BLANK});
 
-        for (int i = 0; i < data.length(); i++) {
-            JSONObject jsonObject = data.getJSONObject(i);
+			values.put(name, jsonObject.getString("value"));
+		}
 
-            String name = jsonObject.getString("name");
+		return values;
+	}
 
-            name = StringUtil.replace(
-                name, new String[]{namespace, id},
-                new String[]{StringPool.BLANK, StringPool.BLANK});
+	protected InvalidConsumerExtensionsException
+		getInvalidConsumerExtensionsException(
+			PortletRequest portletRequest) {
 
-            values.put(name, jsonObject.getString("value"));
-        }
+		if (SessionErrors.contains(
+				portletRequest,
+			InvalidConsumerExtensionsException.class.getName())) {
 
-        return values;
-    }
+			return (InvalidConsumerExtensionsException)SessionErrors.get(
+				portletRequest,
+				InvalidConsumerExtensionsException.class.getName());
+		}
+		else {
+			return new InvalidConsumerExtensionsException();
+		}
+	}
 
-    protected void populateViewContext(
-        String path, PortletRequest portletRequest,
-        PortletResponse portletResponse, Template template,
-        TemplateHashModel staticModels)
-        throws Exception {
+	@Override
+	protected void populateContext(
+			String path, PortletRequest portletRequest,
+			PortletResponse portletResponse, Template template)
+		throws Exception {
 
-        HttpServletRequest request = PortalUtil.getHttpServletRequest(
-            portletRequest);
+		BeansWrapper wrapper = BeansWrapper.getDefaultInstance();
 
-        ThemeDisplay themeDisplay = (ThemeDisplay) portletRequest.getAttribute(
-            WebKeys.THEME_DISPLAY);
+		TemplateHashModel staticModels = wrapper.getStaticModels();
 
-        long consumerId = -1;
+		template.put(
+			"actionKeys", staticModels.get(ActionKeys.class.getName()));
+		template.put("consumerClass", Consumer.class);
+		template.put(
+			"consumerManagerPath",
+			staticModels.get(ConsumerManagerPath.class.getName()));
+		template.put(
+			"consumerManagerPermission",
+			staticModels.get(ConsumerManagerPermission.class.getName()));
+		template.put(
+			"consumerPermission",
+			staticModels.get(ConsumerPermission.class.getName()));
+		template.put("consumersRowChecker", new RowChecker(portletResponse));
 
-        if (ConsumerManagerPath.EDIT_CONSUMER.equals(path)) {
-            consumerId = ParamUtil.getLong(portletRequest, "consumerId");
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-            Map<String, ConsumerExtension> consumerExtensions =
-                _consumerExtensionsRegistry.getConsumerExtensions();
+		String keywords = ParamUtil.getString(portletRequest, "keywords");
 
-            boolean isolated = themeDisplay.isIsolated();
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
 
-            try {
-                themeDisplay.setIsolated(true);
+		template.put(
+			"consumerSearchContainerIterator",
+			new ConsumerSearchContainerIterator(
+				themeDisplay.getCompanyId(), keywords, _consumerLocalService));
 
-                List<ConsumerExtensionInstance> consumerExtensionInstances =
-                    getConsumerExtensionsFromRequest(
-                        portletRequest, portletResponse);
+		template.put("currentURL", PortalUtil.getCurrentURL(portletRequest));
 
-                if (consumerExtensionInstances.isEmpty() && (consumerId > 0)) {
-                    consumerExtensionInstances =
-                        _consumerExtensionInstanceService.
-                            getConsumerExtensionInstances(consumerId);
-                }
+		template.put(
+			"redirect", ParamUtil.getString(portletRequest, "redirect"));
 
-                List<ConsumerExtensionTemplate> addedConsumerExtensionTemplates =
-                    new ArrayList<ConsumerExtensionTemplate>();
+		populateViewContext(
+			path, portletRequest, portletResponse, template, staticModels);
+	}
 
-                if (!consumerExtensionInstances.isEmpty()) {
-                    template.put(
-                        "consumerExtensionInstances", consumerExtensionInstances);
+	protected void populateViewContext(
+			String path, PortletRequest portletRequest,
+			PortletResponse portletResponse, Template template,
+			TemplateHashModel staticModels)
+		throws Exception {
 
-                    InvalidConsumerExtensionsException itae =
-                        getInvalidConsumerExtensionsException(portletRequest);
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(
+			portletRequest);
 
-                    for (ConsumerExtensionInstance instance
-                        : consumerExtensionInstances) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-                        ConsumerExtension consumerExtension =
-                            _consumerExtensionsRegistry.getConsumerExtension(
-                                instance.getConsumerExtensionKey());
+		long consumerId = -1;
 
-                        if (consumerExtension == null) {
-                            continue;
-                        }
+		if (ConsumerManagerPath.EDIT_CONSUMER.equals(path)) {
+			consumerId = ParamUtil.getLong(portletRequest, "consumerId");
 
-                        ConsumerExtensionTemplate consumerExtensionTemplate =
-                            new ConsumerExtensionTemplate();
+			Map<String, ConsumerExtension> consumerExtensions =
+				_consumerExtensionsRegistry.getConsumerExtensions();
 
-                        if (instance.getConsumerExtensionInstanceId() > 0) {
-                            consumerExtensionTemplate.setInstanceId(
-                                String.valueOf(
-                                    instance.getConsumerExtensionInstanceId()));
-                        }
-                        else {
-                            consumerExtensionTemplate.setInstanceId(
-                                instance.getConsumerExtensionGuid());
-                        }
+			boolean isolated = themeDisplay.isIsolated();
 
-                        consumerExtensionTemplate.setConsumerExtension(
-                            consumerExtension);
+			try {
+				themeDisplay.setIsolated(true);
 
-                        String html = getConsumerExtensionHtml(
-                            consumerExtension, instance, template,
-                            instance.getValues(),
-                            itae.getExceptions(
-                                instance.getConsumerExtensionGuid()));
+				List<ConsumerExtensionInstance> consumerExtensionInstances =
+					getConsumerExtensionsFromRequest(
+						portletRequest, portletResponse);
 
-                        consumerExtensionTemplate.setTemplate(
-                            HtmlUtil.escapeAttribute(html));
+				if (consumerExtensionInstances.isEmpty() && (consumerId > 0)) {
+					consumerExtensionInstances =
+						_consumerExtensionInstanceService.
+							getConsumerExtensionInstances(consumerId);
+				}
 
-                        addedConsumerExtensionTemplates.add(
-                            consumerExtensionTemplate);
-                    }
-                }
+				List<ConsumerExtensionTemplate>
+					addedConsumerExtensionTemplates =
+					new ArrayList<ConsumerExtensionTemplate>();
 
-                template.put(
-                    "addedConsumerExtensionTemplates",
-                    addedConsumerExtensionTemplates);
+				if (!consumerExtensionInstances.isEmpty()) {
+					template.put(
+						"consumerExtensionInstances",
+						consumerExtensionInstances);
 
-                List<ConsumerExtensionTemplate> consumerExtensionTemplates =
-                    new ArrayList<ConsumerExtensionTemplate>();
+					InvalidConsumerExtensionsException itae =
+						getInvalidConsumerExtensionsException(portletRequest);
 
-                for (ConsumerExtension consumerExtension : consumerExtensions.values()) {
-                    ConsumerExtensionTemplate consumerExtensionTemplate =
-                        new ConsumerExtensionTemplate();
+					for (ConsumerExtensionInstance instance
+						: consumerExtensionInstances) {
 
-                    consumerExtensionTemplate.setConsumerExtension(
-                        consumerExtension);
+						ConsumerExtension consumerExtension =
+							_consumerExtensionsRegistry.getConsumerExtension(
+								instance.getConsumerExtensionKey());
 
-                    String html = getConsumerExtensionHtml(
-                        consumerExtension, null, template, null, null);
+						if (consumerExtension == null) {
+							continue;
+						}
 
-                    consumerExtensionTemplate.setTemplate(
-                        HtmlUtil.escapeAttribute(html));
-
-                    consumerExtensionTemplates.add(consumerExtensionTemplate);
-                }
-
-                template.put(
-                    "consumerExtensionTemplates", consumerExtensionTemplates);
-            }
-            finally {
-                themeDisplay.setIsolated(isolated);
-            }
-        }
-
-        if (consumerId > 0) {
-            Consumer consumer = ConsumerLocalServiceUtil.getConsumer(
-                consumerId);
-
-            template.put("consumer", consumer);
-            template.put("consumerId", consumerId);
-        }
-    }
-
-    protected List<InvalidConsumerExtensionException> updateConsumerExtensions(
-        long consumerId, PortletRequest request, PortletResponse response)
-        throws Exception {
-
-        List<ConsumerExtensionInstance> requestConsumerExtensionInstances =
-            getConsumerExtensionsFromRequest(request, response);
-
-        List<ConsumerExtensionInstance> consumerExtensionInstances =
-            ListUtil.copy(
-                _consumerExtensionInstanceService.getConsumerExtensionInstances(
-                    consumerId));
-
-        List<InvalidConsumerExtensionException> consumerExtensionExceptions =
-            new ArrayList<InvalidConsumerExtensionException>();
-
-        if (requestConsumerExtensionInstances.isEmpty()) {
-            deleteConsumerExtensionInstances(consumerExtensionInstances);
-
-            return consumerExtensionExceptions;
-        }
-
-        ServiceContext serviceContext = ServiceContextFactory.getInstance(
-            ConsumerExtensionInstance.class.getName(), request);
-
-        ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-            WebKeys.THEME_DISPLAY);
-
-        for (ConsumerExtensionInstance requestConsumerExtensionInstance
-            : requestConsumerExtensionInstances) {
-
-            ConsumerExtension consumerExtension =
-                _consumerExtensionsRegistry.getConsumerExtension(
-                    requestConsumerExtensionInstance.getConsumerExtensionKey());
-
-            if (consumerExtension == null) {
-                continue;
-            }
-
-            String typeSettings = null;
-
-            Map<String, String> consumerExtensionValues =
-                requestConsumerExtensionInstance.getValues();
-
-            try {
-                typeSettings = consumerExtension.processConsumerExtension(
-                    request, response, consumerExtensionValues);
-            }
-            catch (InvalidConsumerExtensionException itae) {
-                itae.setConsumerExtensionGuid(
-                    requestConsumerExtensionInstance.getConsumerExtensionGuid());
-
-                consumerExtensionExceptions.add(itae);
-            }
-            catch (Exception e) {
-                consumerExtensionExceptions.add(
-                    new InvalidConsumerExtensionException(e.getMessage()));
-            }
-
-            long consumerExtensionInstanceId =
-                requestConsumerExtensionInstance.
-                    getConsumerExtensionInstanceId();
-
-            String key = requestConsumerExtensionInstance.
-                getConsumerExtensionKey();
-
-            try {
-                if (consumerExtensionInstanceId > 0) {
-                    ConsumerExtensionInstance consumerExtensionInstance =
-                        _consumerExtensionInstanceService.
-                            updateConsumerExtensionInstance(
-                                consumerExtensionInstanceId, key,
-                                consumerId, typeSettings, serviceContext);
-
-                    consumerExtensionInstances.remove(consumerExtensionInstance);
-                }
-                else {
-                    _consumerExtensionInstanceService.
-                        addConsumerExtensionInstance(
-                            key, consumerId, typeSettings, serviceContext);
-                }
-            }
-            catch (DuplicateConsumerExtensionInstanceException dtaie) {
-                InvalidConsumerExtensionException itae =
-                    new InvalidConsumerExtensionException(
-                        "please-use-a-unique-key");
-
-                itae.setConsumerExtensionGuid(
-                    requestConsumerExtensionInstance.
-                        getConsumerExtensionGuid());
-
-                consumerExtensionExceptions.add(itae);
-            }
-            catch (PortalException pe) {
-                _log.error("Cannot update consumer extension", pe);
-            }
-        }
-
-        deleteConsumerExtensionInstances(consumerExtensionInstances);
-
-        return consumerExtensionExceptions;
-    }
-
-    private ConsumerExtensionInstanceService
-        _consumerExtensionInstanceService;
-    private ConsumerExtensionInstanceLocalService
-        _consumerExtensionInstanceLocalService;
-    private ConsumerExtensionsRegistry _consumerExtensionsRegistry;
-	private ConsumerLocalService _consumerLocalService;
+						ConsumerExtensionTemplate consumerExtensionTemplate =
+							new ConsumerExtensionTemplate();
+
+						if (instance.getConsumerExtensionInstanceId() > 0) {
+							consumerExtensionTemplate.setInstanceId(
+								String.valueOf(
+									instance.getConsumerExtensionInstanceId()));
+						}
+						else {
+							consumerExtensionTemplate.setInstanceId(
+								instance.getConsumerExtensionGuid());
+						}
+
+						consumerExtensionTemplate.setConsumerExtension(
+							consumerExtension);
+
+						String html = getConsumerExtensionHtml(
+							consumerExtension, instance, template,
+							instance.getValues(),
+							itae.getExceptions(
+								instance.getConsumerExtensionGuid()));
+
+						consumerExtensionTemplate.setTemplate(
+							HtmlUtil.escapeAttribute(html));
+
+						addedConsumerExtensionTemplates.add(
+							consumerExtensionTemplate);
+					}
+				}
+
+				template.put(
+					"addedConsumerExtensionTemplates",
+					addedConsumerExtensionTemplates);
+
+				List<ConsumerExtensionTemplate> consumerExtensionTemplates =
+					new ArrayList<ConsumerExtensionTemplate>();
+
+				for (ConsumerExtension consumerExtension
+					: consumerExtensions.values()) {
+
+					ConsumerExtensionTemplate consumerExtensionTemplate =
+						new ConsumerExtensionTemplate();
+
+					consumerExtensionTemplate.setConsumerExtension(
+						consumerExtension);
+
+					String html = getConsumerExtensionHtml(
+						consumerExtension, null, template, null, null);
+
+					consumerExtensionTemplate.setTemplate(
+						HtmlUtil.escapeAttribute(html));
+
+					consumerExtensionTemplates.add(consumerExtensionTemplate);
+				}
+
+				template.put(
+					"consumerExtensionTemplates", consumerExtensionTemplates);
+			}
+			finally {
+				themeDisplay.setIsolated(isolated);
+			}
+		}
+
+		if (consumerId > 0) {
+			Consumer consumer = ConsumerLocalServiceUtil.getConsumer(
+				consumerId);
+
+			template.put("consumer", consumer);
+			template.put("consumerId", consumerId);
+		}
+	}
+
+	protected List<InvalidConsumerExtensionException> updateConsumerExtensions(
+			long consumerId, PortletRequest request, PortletResponse response)
+		throws Exception {
+
+		List<ConsumerExtensionInstance> requestConsumerExtensionInstances =
+			getConsumerExtensionsFromRequest(request, response);
+
+		List<ConsumerExtensionInstance> consumerExtensionInstances =
+			ListUtil.copy(
+				_consumerExtensionInstanceService.getConsumerExtensionInstances(
+					consumerId));
+
+		List<InvalidConsumerExtensionException> consumerExtensionExceptions =
+			new ArrayList<InvalidConsumerExtensionException>();
+
+		if (requestConsumerExtensionInstances.isEmpty()) {
+			deleteConsumerExtensionInstances(consumerExtensionInstances);
+
+			return consumerExtensionExceptions;
+		}
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			ConsumerExtensionInstance.class.getName(), request);
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		for (ConsumerExtensionInstance requestConsumerExtensionInstance
+			: requestConsumerExtensionInstances) {
+
+			ConsumerExtension consumerExtension =
+				_consumerExtensionsRegistry.getConsumerExtension(
+					requestConsumerExtensionInstance.getConsumerExtensionKey());
+
+			if (consumerExtension == null) {
+				continue;
+			}
+
+			String typeSettings = null;
+
+			Map<String, String> consumerExtensionValues =
+				requestConsumerExtensionInstance.getValues();
+
+			try {
+				typeSettings = consumerExtension.processConsumerExtension(
+					request, response, consumerExtensionValues);
+			}
+			catch (InvalidConsumerExtensionException itae) {
+				itae.setConsumerExtensionGuid(
+					requestConsumerExtensionInstance.
+						getConsumerExtensionGuid());
+
+				consumerExtensionExceptions.add(itae);
+			}
+			catch (Exception e) {
+				consumerExtensionExceptions.add(
+					new InvalidConsumerExtensionException(e.getMessage()));
+			}
+
+			long consumerExtensionInstanceId =
+				requestConsumerExtensionInstance.
+					getConsumerExtensionInstanceId();
+
+			String key =
+				requestConsumerExtensionInstance.getConsumerExtensionKey();
+
+			try {
+				if (consumerExtensionInstanceId > 0) {
+					ConsumerExtensionInstance consumerExtensionInstance =
+						_consumerExtensionInstanceService.
+							updateConsumerExtensionInstance(
+								consumerExtensionInstanceId, key, consumerId,
+								typeSettings, serviceContext);
+
+					consumerExtensionInstances.remove(
+						consumerExtensionInstance);
+				}
+				else {
+					_consumerExtensionInstanceService.
+						addConsumerExtensionInstance(
+							key, consumerId, typeSettings, serviceContext);
+				}
+			}
+			catch (DuplicateConsumerExtensionInstanceException dtaie) {
+				InvalidConsumerExtensionException itae =
+					new InvalidConsumerExtensionException(
+						"please-use-a-unique-key");
+
+				itae.setConsumerExtensionGuid(
+					requestConsumerExtensionInstance.
+						getConsumerExtensionGuid());
+
+				consumerExtensionExceptions.add(itae);
+			}
+			catch (PortalException pe) {
+				_log.error("Cannot update consumer extension", pe);
+			}
+		}
+
+		deleteConsumerExtensionInstances(consumerExtensionInstances);
+
+		return consumerExtensionExceptions;
+	}
 
 	private static Log _log = LogFactoryUtil.getLog(
 		ConsumerManagerPortlet.class);
+
+	private ConsumerExtensionInstanceLocalService
+		_consumerExtensionInstanceLocalService;
+	private ConsumerExtensionInstanceService
+		_consumerExtensionInstanceService;
+	private ConsumerExtensionsRegistry _consumerExtensionsRegistry;
+	private ConsumerLocalService _consumerLocalService;
 
 }

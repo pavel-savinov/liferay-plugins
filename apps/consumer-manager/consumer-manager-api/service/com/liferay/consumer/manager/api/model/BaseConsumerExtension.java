@@ -22,120 +22,123 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 
 /**
  * @author Pavel Savinov
  */
 public class BaseConsumerExtension implements ConsumerExtension {
 
-    @Override
-    public void activate() {
-        if (_log.isDebugEnabled()) {
-            _log.debug("ConsumerExtension activate: " +
-                    getClass().getSimpleName());
-        }
-    }
+	@Override
+	public void activate() {
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				"ConsumerExtension activate: " + getClass().getSimpleName());
+		}
+	}
 
-    @Override
-    public void deActivate() {
-        if (_log.isDebugEnabled()) {
-            _log.debug("ConsumerExtension deactivate: " +
-                    getClass().getSimpleName());
-        }
-    }
+	@Override
+	public void deActivate() {
+		if (_log.isDebugEnabled()) {
+			_log.debug(
+				"ConsumerExtension deactivate: " + getClass().getSimpleName());
+		}
+	}
 
-    @Override
-    public String getConsumerExtensionKey() {
-        return getClass().getSimpleName();
-    }
+	@Override
+	public String getConsumerExtensionKey() {
+		return getClass().getSimpleName();
+	}
 
-    @Override
-    public String getDescription(Locale locale) {
-        String key = getClass().getName().concat(".description");
+	@Override
+	public String getDescription(Locale locale) {
+		String key = getClass().getName().concat(".description");
 
-        String description = ResourceActionsUtil.getModelResource(locale, key);
+		String description = ResourceActionsUtil.getModelResource(locale, key);
 
-        if (description.endsWith(key)) {
-            description = getShortDescription(locale);
-        }
+		if (description.endsWith(key)) {
+			description = getShortDescription(locale);
+		}
 
-        return description;
-    }
+		return description;
+	}
 
-    @Override
-    public String getFormHTML(
-        ConsumerExtensionInstance consumerExtensionInstance,
-        Map<String, Object> context, Map<String, String> values) {
+	@Override
+	public String getFormHTML(
+		ConsumerExtensionInstance consumerExtensionInstance,
+		Map<String, Object> context, Map<String, String> values) {
 
-        String content = StringPool.BLANK;
+		String content = StringPool.BLANK;
 
-        try {
-            populateContext(consumerExtensionInstance, context, values);
+		try {
+			populateContext(consumerExtensionInstance, context, values);
 
-            content = ConsumerManagerContextUtil.parseTemplate(
-                getClass(), _FORM_TEMPLATE_PATH, context);
-        }
-        catch (Exception e) {
-            _log.error(
-                "Error while processing consumer extension form template " +
-                    _FORM_TEMPLATE_PATH,
-                e);
-        }
+			content = ConsumerManagerContextUtil.parseTemplate(
+				getClass(), _FORM_TEMPLATE_PATH, context);
+		}
+		catch (Exception e) {
+			_log.error(
+				"Error while processing consumer extension form template " +
+					_FORM_TEMPLATE_PATH,
+				e);
+		}
 
-        return content;
-    }
+		return content;
+	}
 
-    @Override
-    public String getIcon() {
-        return "icon-file";
-    }
+	@Override
+	public String getIcon() {
+		return "icon-file";
+	}
 
-    @Override
-    public String getName(Locale locale) {
-        return ResourceActionsUtil.getModelResource(
-            locale, getClass().getName());
-    }
+	@Override
+	public String getName(Locale locale) {
+		return ResourceActionsUtil.getModelResource(
+			locale, getClass().getName());
+	}
 
-    @Override
-    public String getShortDescription(Locale locale) {
-        String key = getClass().getName().concat(".shortDescription");
+	@Override
+	public String getShortDescription(Locale locale) {
+		String key = getClass().getName().concat(".shortDescription");
 
-        String shortDescription = ResourceActionsUtil.getModelResource(
-            locale, key);
+		String shortDescription = ResourceActionsUtil.getModelResource(
+			locale, key);
 
-        if (shortDescription.endsWith(key)) {
-            shortDescription = StringPool.BLANK;
-        }
+		if (shortDescription.endsWith(key)) {
+			shortDescription = StringPool.BLANK;
+		}
 
-        return shortDescription;
-    }
+		return shortDescription;
+	}
 
-    @Override
-    public String getSummary(
-        ConsumerExtensionInstance consumerExtensionInstance, Locale locale) {
-        return null;
-    }
+	@Override
+	public String getSummary(
+		ConsumerExtensionInstance consumerExtensionInstance, Locale locale) {
 
-    @Override
-    public String processConsumerExtension(
-        PortletRequest request, PortletResponse response,
-        Map<String, String> values) throws InvalidConsumerExtensionException {
-        return null;
-    }
+		return null;
+	}
 
-    protected void populateContext(
-        ConsumerExtensionInstance consumerExtensionInstance,
-        Map<String, Object> context, Map<String, String> values) {
-    }
+	@Override
+	public String processConsumerExtension(
+		PortletRequest request, PortletResponse response,
+		Map<String, String> values) throws InvalidConsumerExtensionException {
 
-    protected static final String _FORM_TEMPLATE_PATH =
-        "templates/cm_extension.ftl";
+		return null;
+	}
 
-    private static Log _log = LogFactoryUtil.getLog(
-        BaseConsumerExtension.class);
+	protected void populateContext(
+		ConsumerExtensionInstance consumerExtensionInstance,
+		Map<String, Object> context, Map<String, String> values) {
+	}
+
+	protected static final String _FORM_TEMPLATE_PATH =
+		"templates/cm_extension.ftl";
+
+	private static Log _log = LogFactoryUtil.getLog(
+		BaseConsumerExtension.class);
 
 }

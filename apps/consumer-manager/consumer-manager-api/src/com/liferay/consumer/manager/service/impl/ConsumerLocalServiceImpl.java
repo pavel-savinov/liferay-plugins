@@ -17,6 +17,9 @@ package com.liferay.consumer.manager.service.impl;
 import com.liferay.consumer.manager.model.Consumer;
 import com.liferay.consumer.manager.service.base.ConsumerLocalServiceBaseImpl;
 import com.liferay.consumer.manager.util.BaseModelSearchResult;
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
@@ -26,17 +29,11 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
-
-import com.liferay.counter.service.CounterLocalServiceUtil;
-
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,30 +60,40 @@ public class ConsumerLocalServiceImpl extends ConsumerLocalServiceBaseImpl {
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Consumer addConsumer(
-            String consumerKey, Map<Locale, String> descriptionMap,
-            Map<Locale, String> nameMap, ServiceContext serviceContext)
+			String consumerKey, Map<Locale, String> descriptionMap,
+			Map<Locale, String> nameMap, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-        User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
+		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
 
-        Date now = new Date();
+		Date now = new Date();
 
 		long consumerId = CounterLocalServiceUtil.increment();
 
 		Consumer consumer = consumerPersistence.create(consumerId);
 
-        consumer.setUuid(serviceContext.getUuid());
-        consumer.setCompanyId(user.getCompanyId());
-        consumer.setUserId(user.getUserId());
-        consumer.setUserName(user.getFullName());
-        consumer.setCreateDate(serviceContext.getCreateDate(now));
-        consumer.setModifiedDate(serviceContext.getModifiedDate(now));
+		consumer.setUuid(serviceContext.getUuid());
+		consumer.setCompanyId(user.getCompanyId());
+		consumer.setUserId(user.getUserId());
+		consumer.setUserName(user.getFullName());
+		consumer.setCreateDate(serviceContext.getCreateDate(now));
+		consumer.setModifiedDate(serviceContext.getModifiedDate(now));
 
-        consumer.setConsumerKey(consumerKey);
+		consumer.setConsumerKey(consumerKey);
 		consumer.setNameMap(nameMap);
 		consumer.setDescriptionMap(descriptionMap);
 
 		consumerPersistence.update(consumer);
+
+		return consumer;
+	}
+
+	@Indexable(type = IndexableType.DELETE)
+	@Override
+	public Consumer deleteConsumer(Consumer consumer)
+		throws PortalException, SystemException {
+
+		consumerPersistence.remove(consumer);
 
 		return consumer;
 	}
@@ -101,30 +108,20 @@ public class ConsumerLocalServiceImpl extends ConsumerLocalServiceBaseImpl {
 		return deleteConsumer(consumer);
 	}
 
-	@Indexable(type = IndexableType.DELETE)
 	@Override
-	public Consumer deleteConsumer(Consumer consumer)
-		throws PortalException, SystemException {
+	public Consumer getConsumer(long companyId, String consumerKey)
+		throws SystemException {
 
-		consumerPersistence.remove(consumer);
-
-		return consumer;
+		return consumerPersistence.fetchByCompanyIdAndConsumerKey(
+			companyId, consumerKey);
 	}
 
-    @Override
-    public Consumer getConsumer(long companyId, String consumerKey)
-        throws SystemException {
+	@Override
+	public List<Consumer> getConsumers()
+		throws PortalException, SystemException {
 
-        return consumerPersistence.fetchByCompanyIdAndConsumerKey(
-            companyId, consumerKey);
-    }
-
-    @Override
-    public List<Consumer> getConsumers()
-        throws PortalException, SystemException {
-
-        return consumerPersistence.findAll();
-    }
+		return consumerPersistence.findAll();
+	}
 
 	@Override
 	public List<Consumer> getConsumers(long companyId)
@@ -142,12 +139,10 @@ public class ConsumerLocalServiceImpl extends ConsumerLocalServiceBaseImpl {
 	}
 
 	@Override
-	public int getConsumersCount(long companyId)
-		throws SystemException {
-
+	public int getConsumersCount(long companyId) throws SystemException {
 		return consumerPersistence.countByCompanyId(companyId);
 	}
-	
+
 	@Override
 	public Hits search(long companyId, String keywords, int start, int end)
 		throws PortalException, SystemException {
@@ -161,39 +156,39 @@ public class ConsumerLocalServiceImpl extends ConsumerLocalServiceBaseImpl {
 		return indexer.search(searchContext);
 	}
 
-    @Override
-    public BaseModelSearchResult<Consumer> searchConsumers(
-        long companyId, String keywords, int start, int end)
-        throws PortalException, SystemException {
+	@Override
+	public BaseModelSearchResult<Consumer> searchConsumers(
+			long companyId, String keywords, int start, int end)
+		throws PortalException, SystemException {
 
-        SearchContext searchContext = buildSearchContext(
-            companyId, keywords, start, end);
+		SearchContext searchContext = buildSearchContext(
+			companyId, keywords, start, end);
 
-        return searchConsumers(searchContext);
-    }
+		return searchConsumers(searchContext);
+	}
 
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Consumer updateConsumer(
 			long consumerId, String consumerKey,
-            Map<Locale, String> descriptionMap, Map<Locale, String> nameMap,
-            ServiceContext serviceContext)
+			Map<Locale, String> descriptionMap, Map<Locale, String> nameMap,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		Consumer consumer = consumerPersistence.findByPrimaryKey(consumerId);
 
-        Date now = new Date();
+		Date now = new Date();
 
-        consumer.setConsumerKey(consumerKey);
+		consumer.setConsumerKey(consumerKey);
 		consumer.setNameMap(nameMap);
 		consumer.setDescriptionMap(descriptionMap);
-        consumer.setModifiedDate(serviceContext.getModifiedDate(now));
+		consumer.setModifiedDate(serviceContext.getModifiedDate(now));
 
 		consumerPersistence.update(consumer);
 
 		return consumer;
 	}
-	
+
 	protected SearchContext buildSearchContext(
 			long companyId, String keywords, int start, int end)
 		throws PortalException, SystemException {
@@ -208,28 +203,6 @@ public class ConsumerLocalServiceImpl extends ConsumerLocalServiceBaseImpl {
 		return searchContext;
 	}
 
-	protected BaseModelSearchResult<Consumer> searchConsumers(
-			SearchContext searchContext)
-		throws PortalException, SystemException {
-
-		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
-			Consumer.class);
-
-		for (int i = 0; i < 10; i++) {
-			Hits hits = indexer.search(searchContext);
-
-			List<Consumer> consumers = getConsumers(hits);
-
-			if (consumers != null) {
-				return new BaseModelSearchResult<Consumer>(
-					consumers, hits.getLength());
-			}
-		}
-
-		throw new SearchException(
-			"Unable to fix the search index after 10 attempts");
-	}
-	
 	protected List<Consumer> getConsumers(Hits hits)
 		throws PortalException, SystemException {
 
@@ -261,6 +234,26 @@ public class ConsumerLocalServiceImpl extends ConsumerLocalServiceBaseImpl {
 		return consumers;
 	}
 
-	
+	protected BaseModelSearchResult<Consumer> searchConsumers(
+			SearchContext searchContext)
+		throws PortalException, SystemException {
+
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			Consumer.class);
+
+		for (int i = 0; i < 10; i++) {
+			Hits hits = indexer.search(searchContext);
+
+			List<Consumer> consumers = getConsumers(hits);
+
+			if (consumers != null) {
+				return new BaseModelSearchResult<Consumer>(
+					consumers, hits.getLength());
+			}
+		}
+
+		throw new SearchException(
+			"Unable to fix the search index after 10 attempts");
+	}
 
 }
