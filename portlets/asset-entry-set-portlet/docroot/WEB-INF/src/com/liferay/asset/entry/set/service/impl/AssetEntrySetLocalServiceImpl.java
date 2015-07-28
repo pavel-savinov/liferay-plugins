@@ -21,6 +21,7 @@ import com.liferay.asset.entry.set.service.base.AssetEntrySetLocalServiceBaseImp
 import com.liferay.asset.entry.set.service.persistence.AssetEntrySetFinderUtil;
 import com.liferay.asset.entry.set.service.persistence.AssetEntrySetLikePK;
 import com.liferay.asset.entry.set.util.AssetEntrySetConstants;
+import com.liferay.asset.entry.set.util.AssetEntrySetImageUtil;
 import com.liferay.asset.entry.set.util.AssetEntrySetManagerUtil;
 import com.liferay.asset.entry.set.util.AssetEntrySetParticipantInfoUtil;
 import com.liferay.asset.entry.set.util.PortletKeys;
@@ -37,6 +38,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -97,6 +99,9 @@ public class AssetEntrySetLocalServiceImpl
 		assetEntrySet.setParentAssetEntrySetId(parentAssetEntrySetId);
 		assetEntrySet.setCreatorClassNameId(creatorClassNameId);
 		assetEntrySet.setCreatorClassPK(creatorClassPK);
+		assetEntrySet.setCreatorName(
+			AssetEntrySetParticipantInfoUtil.getParticipantName(
+				creatorClassNameId, creatorClassPK));
 
 		filterAssetTagNames(payloadJSONObject);
 
@@ -171,14 +176,14 @@ public class AssetEntrySetLocalServiceImpl
 
 	@Override
 	public List<AssetEntrySet> getNewAssetEntrySets(
-			long userId, long createTime, long parentAssetEntrySetId,
+			long userId, long modifiedTime, long parentAssetEntrySetId,
 			JSONArray sharedToJSONArray, String[] assetTagNames, int start,
 			int end)
 		throws PortalException, SystemException {
 
 		return getAssetEntrySets(
-			userId, createTime, true, parentAssetEntrySetId, sharedToJSONArray,
-			assetTagNames, start, end);
+			userId, modifiedTime, true, parentAssetEntrySetId,
+			sharedToJSONArray, assetTagNames, start, end);
 	}
 
 	@Override
@@ -197,14 +202,14 @@ public class AssetEntrySetLocalServiceImpl
 
 	@Override
 	public List<AssetEntrySet> getOldAssetEntrySets(
-			long userId, long createTime, long parentAssetEntrySetId,
+			long userId, long modifiedTime, long parentAssetEntrySetId,
 			JSONArray sharedToJSONArray, String[] assetTagNames, int start,
 			int end)
 		throws PortalException, SystemException {
 
 		return getAssetEntrySets(
-			userId, createTime, false, parentAssetEntrySetId, sharedToJSONArray,
-			assetTagNames, start, end);
+			userId, modifiedTime, false, parentAssetEntrySetId,
+			sharedToJSONArray, assetTagNames, start, end);
 	}
 
 	@Override
@@ -323,6 +328,13 @@ public class AssetEntrySetLocalServiceImpl
 
 		Set<Long> fileEntryIds = new HashSet<Long>();
 
+		try {
+			AssetEntrySetImageUtil.rotateImage(file);
+		}
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
+		}
+
 		FileEntry rawFileEntry = addFileEntry(userId, file, StringPool.BLANK);
 
 		fileEntryIds.add(rawFileEntry.getFileEntryId());
@@ -330,8 +342,7 @@ public class AssetEntrySetLocalServiceImpl
 		for (String imageType :
 				PortletPropsValues.ASSET_ENTRY_SET_IMAGE_TYPES) {
 
-			FileEntry fileEntry = addImageFileEntry(
-				userId, file, rawFileEntry, imageType);
+			FileEntry fileEntry = addImageFileEntry(userId, file, imageType);
 
 			fileEntryIds.add(fileEntry.getFileEntryId());
 
@@ -354,7 +365,7 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected FileEntry addImageFileEntry(
-			long userId, File file, FileEntry rawFileEntry, String imageType)
+			long userId, File file, String imageType)
 		throws PortalException, SystemException {
 
 		ImageBag imageBag = null;
@@ -376,12 +387,6 @@ public class AssetEntrySetLocalServiceImpl
 		RenderedImage scaledRenderedImage = ImageToolUtil.scale(
 			rawRenderedImage, GetterUtil.getInteger(maxDimensions[0]),
 			GetterUtil.getInteger(maxDimensions[1]));
-
-		if ((rawRenderedImage.getWidth() == scaledRenderedImage.getWidth()) &&
-			(rawRenderedImage.getHeight() == scaledRenderedImage.getHeight())) {
-
-			return rawFileEntry;
-		}
 
 		File scaledFile = null;
 
@@ -419,7 +424,7 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected List<AssetEntrySet> getAssetEntrySets(
-			long userId, long createTime, boolean gtCreateTime,
+			long userId, long modifiedTime, boolean gtModifiedTime,
 			long parentAssetEntrySetId, JSONArray sharedToJSONArray,
 			String[] assetTagNames, int start, int end)
 		throws PortalException, SystemException {
@@ -431,9 +436,9 @@ public class AssetEntrySetLocalServiceImpl
 		List<AssetEntrySet> assetEntrySets =
 			assetEntrySetFinder.findByCT_PAESI_CNI(
 				classNameIdAndClassPKOVP.getKey(),
-				classNameIdAndClassPKOVP.getValue(), createTime, gtCreateTime,
-				parentAssetEntrySetId, sharedToJSONArray, assetTagNames, start,
-				end);
+				classNameIdAndClassPKOVP.getValue(), modifiedTime,
+				gtModifiedTime, parentAssetEntrySetId, sharedToJSONArray,
+				assetTagNames, start, end);
 
 		return assetEntrySets;
 	}
@@ -472,11 +477,19 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected boolean isValidAssetTagName(String assetTagName) {
-		if (!Validator.isChar(assetTagName.charAt(0))) {
+		if (Validator.isDigit(assetTagName.charAt(0))) {
 			return false;
 		}
 
-		return Validator.isAlphanumericName(assetTagName);
+		for (char c : assetTagName.toCharArray()) {
+			if (!Validator.isChar(c) && !Validator.isDigit(c) &&
+				(c != CharPool.UNDERLINE)) {
+
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	protected void setSharedToClassPKsMap(
