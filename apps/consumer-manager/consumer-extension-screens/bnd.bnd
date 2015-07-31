@@ -1,0 +1,26 @@
+Bundle-Name: Screens extension
+Bundle-SymbolicName: com.liferay.consumer.manager.extension.screens
+Bundle-Version: 1.0.0
+Export-Package:\
+    com.liferay.consumer.manager.extension.screens,\
+    com.liferay.consumer.manager.extension.screens.model,\
+	com.liferay.consumer.manager.extension.screens.messaging,\
+	com.liferay.consumer.manager.extension.screens.messaging.config,\
+	com.liferay.consumer.manager.extension.screens.service
+Import-Package:\
+	com.liferay.consumer.manager.api.model,\
+	com.liferay.consumer.manager.service,\
+	com.liferay.consumer.manager.service.messaging,\
+	com.liferay.osgi.util.service,\
+	*;resolution:="optional"
+Include-Resource:\
+ 	classes,\
+ 	WEB-INF/classes/META-INF=classes/META-INF/,\
+    WEB-INF/sql=sql,\
+	WEB-INF/liferay-hook.xml=META-INF/liferay-hook.xml,\
+	@${app.server.portal.dir}/WEB-INF/lib/util-java.jar,\
+	@lib/com.liferay.consumer.manager.extension.screens-service.jar
+Private-Package: com.liferay.consumer.manager.extension.screens.*
+Service-Component: com.liferay.consumer.manager.extension.screens.*
+Web-ContextPath: /extension-screens
+-baseline: *;version="1.0.0"

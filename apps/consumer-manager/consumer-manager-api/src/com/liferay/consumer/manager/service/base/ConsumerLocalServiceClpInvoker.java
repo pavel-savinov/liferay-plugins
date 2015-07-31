@@ -180,13 +180,13 @@ public class ConsumerLocalServiceClpInvoker {
 
         _methodName49 = "deleteConsumer";
 
-        _methodParameterTypes49 = new String[] { "long" };
+        _methodParameterTypes49 = new String[] {
+                "com.liferay.consumer.manager.model.Consumer"
+            };
 
         _methodName50 = "deleteConsumer";
 
-        _methodParameterTypes50 = new String[] {
-                "com.liferay.consumer.manager.model.Consumer"
-            };
+        _methodParameterTypes50 = new String[] { "long" };
 
         _methodName51 = "getConsumer";
 
@@ -354,12 +354,12 @@ public class ConsumerLocalServiceClpInvoker {
 
         if (_methodName49.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
-            return ConsumerLocalServiceUtil.deleteConsumer(((Long) arguments[0]).longValue());
+            return ConsumerLocalServiceUtil.deleteConsumer((com.liferay.consumer.manager.model.Consumer) arguments[0]);
         }
 
         if (_methodName50.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
-            return ConsumerLocalServiceUtil.deleteConsumer((com.liferay.consumer.manager.model.Consumer) arguments[0]);
+            return ConsumerLocalServiceUtil.deleteConsumer(((Long) arguments[0]).longValue());
         }
 
         if (_methodName51.equals(name) &&

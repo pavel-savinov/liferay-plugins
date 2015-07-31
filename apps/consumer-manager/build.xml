@@ -11,7 +11,8 @@
 	<property file="sonar.properties" />
 
 	<property name="app.core" value="*-api,*-service,*-web,runtime-dependencies" />
-	<property name="app.services" value="consumer-manager-api" />
+    <property name="app.extensions" value="consumer-extension-*" />
+	<property name="app.services" value="consumer-manager-api,consumer-extension-screens" />
 
 	<target name="all">
 		<antcall target="release" />
@@ -27,7 +28,7 @@
 				<isset property="app.plugins.includes" />
 			</not>
 			<then>
-				<property name="app.plugins.includes" value="${app.core}" />
+				<property name="app.plugins.includes" value="${app.core},${app.services}" />
 			</then>
 		</if>
 

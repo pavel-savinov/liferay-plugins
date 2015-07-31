@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
+<service-builder package-path="com.liferay.consumer.manager.extension.screens">
+	<namespace>CM_Screens</namespace>
+	<entity name="Placeholder" uuid="true" local-service="true" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="placeholderId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="key" type="String" />
+		<column name="name" type="String" localized="true" />
+		<column name="description" type="String" localized="true" />
+        <column name="consumerId" type="long" />
+
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="name" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="ConsumerId" return-type="Collection">
+			<finder-column name="consumerId" />
+		</finder>
+
+		<finder name="Key" return-type="Consumer" unique="true">
+			<finder-column name="key" />
+		</finder>
+	</entity>
+</service-builder>

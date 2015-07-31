@@ -51,6 +51,7 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnicodeFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -395,6 +396,9 @@ public class ConsumerManagerPortlet extends FreeMarkerPortlet {
 			"consumerPermission",
 			staticModels.get(ConsumerPermission.class.getName()));
 		template.put("consumersRowChecker", new RowChecker(portletResponse));
+        template.put(
+            "unicodeFormatter",
+            staticModels.get(UnicodeFormatter.class.getName()));
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -589,6 +593,9 @@ public class ConsumerManagerPortlet extends FreeMarkerPortlet {
 
 			Map<String, String> consumerExtensionValues =
 				requestConsumerExtensionInstance.getValues();
+
+            consumerExtensionValues.put(
+                "consumerId", String.valueOf(consumerId));
 
 			try {
 				typeSettings = consumerExtension.processConsumerExtension(

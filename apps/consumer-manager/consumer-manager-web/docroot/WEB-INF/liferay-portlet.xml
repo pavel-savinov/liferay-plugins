@@ -11,7 +11,6 @@
 		<render-weight>1</render-weight>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/js/search.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/main.js</header-portlet-javascript>
 		<header-portlet-javascript>/js/ct_form_builder.js</header-portlet-javascript>
 		<css-class-wrapper>consumer-manager-portlet</css-class-wrapper>
 	</portlet>
