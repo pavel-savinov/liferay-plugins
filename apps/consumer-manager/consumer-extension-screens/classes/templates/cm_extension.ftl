@@ -27,13 +27,29 @@
             ${addLinkIcon}
         </a>
 
-        <@liferay_util["buffer"] var="removeLinkIcon">
-            <@liferay_ui["icon"]
-                cssClass="btn remove-placeholder-btn"
-                iconCssClass="icon-remove"
-                label=true
-                message="remove"
-            />
+        <@liferay_util["buffer"] var="placeholderMenu">
+            <button class="placeholder-menu-dd-btn btn btn-default btn-group lfr-icon-menu dropdown-toggle" type="button">
+                ${languageUtil.get(locale, "actions")}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <@liferay_ui["icon"]
+                        cssClass="edit-placeholder-btn placeholder-actions-menu-btn"
+                        iconCssClass="icon-edit"
+                        label=true
+                        message="edit"
+                    />
+                </li>
+                <li>
+                    <@liferay_ui["icon"]
+                        cssClass="remove-placeholder-btn placeholder-actions-menu-btn"
+                        iconCssClass="icon-remove"
+                        label=true
+                        message="delete"
+                    />
+                </li>
+            </ul>
         </@>
 
         <@liferay_ui["search-container"]
@@ -61,9 +77,30 @@
                 />
 
                 <@liferay_ui["search-container-column-text"]>
-                    <a class="remove-placeholder-link" data-rowId="${placeholder.getKey()}" href="javascript:;">
-                        ${removeLinkIcon}
-                    </a>
+                    <div class="placeholder-actions-menu-div dropdown" data-rowId="${placeholder.getKey()}">
+                        <button class="placeholder-menu-dd-btn btn btn-default btn-group lfr-icon-menu dropdown-toggle" type="button">
+                            ${languageUtil.get(locale, "actions")}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <@liferay_ui["icon"]
+                                    cssClass="edit-placeholder-btn placeholder-actions-menu-btn"
+                                    iconCssClass="icon-edit"
+                                    label=true
+                                    message="edit"
+                                />
+                            </li>
+                            <li>
+                                <@liferay_ui["icon"]
+                                    cssClass="remove-placeholder-btn placeholder-actions-menu-btn"
+                                    iconCssClass="icon-remove"
+                                    label=true
+                                    message="delete"
+                                />
+                            </li>
+                        </ul>
+                    </div>
                 </@>
             </@>
 
@@ -74,7 +111,7 @@
 
 <div id="<@portlet["namespace"]/>placeholderAddDialog"></div>
 
-<@aui["script"] use="aui-base,escape,liferay-search-container">
+<@aui["script"] use="aui-base,aui-dropdown,escape,liferay-search-container">
 
     var PLACEHOLDER_ADD_TPL = '${unicodeFormatter.toString(placeholderTemplate)}';
 
@@ -87,9 +124,24 @@
 
         var searchContainer = Liferay.SearchContainer.get(searchContainerName);
 
-        var entryLink = '<a class="remove-placeholder-link" data-rowId="' + A.Escape.html(placeholderKey) + '" href="javascript:;">${unicodeFormatter.toString(removeLinkIcon)}</a>';
+        var entryLink = '<div class="placeholder-actions-menu-div dropdown" data-rowId="' + A.Escape.html(placeholderKey) + '">${unicodeFormatter.toString(placeholderMenu)}</div>';
 
         searchContainer.addRow([A.Escape.html(placeholderKey), A.Escape.html(placeholderName), entryLink], A.Escape.html(placeholderKey));
+
+        var menu = A.one('div[data-rowId="' + placeholderKey +'"]');
+        var menuId = '<@portlet["namespace"]/>' + placeholderKey + '_menu';
+        menu.set('id', menuId);
+
+        var menuBtn = menu.one('button.placeholder-menu-dd-btn');
+        var menuBtnId = '<@portlet["namespace"]/>' + placeholderKey + '_menuBtn';
+        menuBtn.set('id', menuBtnId);
+
+        new A.Dropdown(
+            {
+                boundingBox: '#' + menuId,
+                trigger: '#' + menuBtnId
+            }
+        ).render();
 
         <@portlet["namespace"]/>addPlaceholderJson(placeholderKey, placeholderName, placeholderDescription);
     };
@@ -180,14 +232,32 @@
 	searchContainer.get('contentBox').delegate(
 		'click',
 		function(event) {
-			var link = event.currentTarget;
+			var button = event.currentTarget;
 
-			var tr = link.ancestor('tr');
+            var menu = button.ancestor('.placeholder-actions-menu-div');
 
-			searchContainer.deleteRow(tr, link.getAttribute('data-rowId'));
+            if (!menu) {
+                return;
+            }
 
-            <@portlet["namespace"]/>deletePlaceholderJson(link.getAttribute('data-rowId'));
+            var rowId = menu.getAttribute('data-rowId');
+
+			var tr = menu.ancestor('tr');
+
+            if (!rowId) {
+                return;
+            }
+
+            if (button.hasClass('remove-placeholder-btn')) {
+                console.log('delete '+rowId);
+                searchContainer.deleteRow(tr, menu.getAttribute('data-rowId'));
+                <@portlet["namespace"]/>deletePlaceholderJson();
+            }
+            else if (button.hasClass('edit-placeholder-btn')){
+                console.log('edit btn pressed '+rowId);
+            }
+
 		},
-		'.remove-placeholder-link'
+		'.placeholder-actions-menu-btn'
 	);
 </@>
